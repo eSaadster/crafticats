@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pi Extensions Gallery | pi.dev</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-hover: #21262d;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --text-bright: #f0f6fc;
+      --accent: #58a6ff;
+      --accent-hover: #79b8ff;
+      --green: #3fb950;
+      --orange: #d29922;
+      --red: #f85149;
+      --purple: #a371f7;
+      --pink: #db61a2;
+      --crab-red: #D04040;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .header h1 .pi-logo {
+      font-family: 'JetBrains Mono', monospace;
+      background: linear-gradient(135deg, var(--crab-red), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .controls {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+    }
+
+    .search-box::before {
+      content: "🔍";
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .chip:hover {
+      background: var(--surface-hover);
+      border-color: var(--accent);
+    }
+
+    .chip.active {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    .chip.active:hover {
+      background: var(--accent-hover);
+    }
+
+    .category-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .category-icon {
+      font-size: 1.5rem;
+    }
+
+    .category-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-bright);
+    }
+
+    .category-count {
+      background: var(--surface);
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .extensions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1rem;
+    }
+
+    .extension-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      transition: all 0.2s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .extension-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .extension-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--purple));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .extension-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      word-break: break-word;
+    }
+
+    .card-downloads {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .card-description {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .card-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tag.extension { background: rgba(88, 166, 255, 0.15); color: var(--accent); }
+    .tag.skill { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+    .tag.theme { background: rgba(163, 113, 247, 0.15); color: var(--purple); }
+    .tag.prompt { background: rgba(210, 153, 34, 0.15); color: var(--orange); }
+
+    .card-author {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .card-author span {
+      color: var(--accent);
+    }
+
+    .install-cmd {
+      background: var(--bg);
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      margin-top: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .install-cmd code {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .copy-btn:hover {
+      color: var(--accent);
+      background: var(--surface-hover);
+    }
+
+    .copy-btn.copied {
+      color: var(--green);
+    }
+
+    .featured {
+      border-color: var(--orange);
+    }
+
+    .featured .card-title::before {
+      content: "⭐ ";
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .no-results h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .header h1 { font-size: 1.75rem; }
+      .stats-bar { gap: 1rem; }
+      .stat-value { font-size: 1.25rem; }
+      .controls { flex-direction: column; }
+      .search-box { width: 100%; }
+      .extensions-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1><span class="pi-logo">π</span> Pi Extensions Gallery</h1>
+    <p>Extensions, skills, themes & prompts for the pi.dev coding agent</p>
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat-value" id="total-count">165</span>
+        <span class="stat-label">Packages</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="extension-count">120+</span>
+        <span class="stat-label">Extensions</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">15+</span>
+        <span class="stat-label">Providers</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">300+</span>
+        <span class="stat-label">Models</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Search extensions...">
+    </div>
+    <div class="filter-chips">
+      <div class="chip active" data-filter="all">All</div>
+      <div class="chip" data-filter="extension">🧩 Extensions</div>
+      <div class="chip" data-filter="skill">🛠️ Skills</div>
+      <div class="chip" data-filter="theme">🎨 Themes</div>
+      <div class="chip" data-filter="prompt">📝 Prompts</div>
+    </div>
+  </div>
+
+  <div id="content"></div>
+
+  <div class="footer">
+    Built with 🦀 by Klaus • Data from <a href="https://pi.dev/packages" target="_blank">pi.dev/packages</a> • 
+    <a href="https://github.com/badlogic/pi-mono" target="_blank">GitHub</a>
+  </div>
+
+  <script>
+    const extensions = [
+      // 🎮 Fun & Games
+      { name: "@tmustier/pi-nes", desc: "NES emulator extension for pi - play classic games while coding", author: "tmustier", downloads: 3777, tags: ["extension"], category: "fun", install: "pi install npm:@tmustier/pi-nes", featured: true },
+      { name: "@tmustier/pi-arcade", desc: "Arcade minigames for the Pi coding agent", author: "tmustier", downloads: 588, tags: ["extension"], category: "fun", install: "pi install npm:@tmustier/pi-arcade" },
+      { name: "pi-doom", desc: "Yes, Doom runs in pi. Because of course it does.", author: "badlogic", downloads: 0, tags: ["extension"], category: "fun", install: "pi install git:github.com/badlogic/pi-doom", featured: true },
+
+      // 🤖 Subagents & Multi-Agent
+      { name: "pi-subagents", desc: "Delegate tasks to subagents with chains, parallel execution, and TUI clarification", author: "nicopreme", downloads: 1422, tags: ["extension"], category: "agents", install: "pi install npm:pi-subagents", featured: true },
+      { name: "pi-interactive-shell", desc: "Run AI coding agents as foreground subagents in pi TUI overlays with hands-free monitoring", author: "nicopreme", downloads: 3183, tags: ["extension"], category: "agents", install: "pi install npm:pi-interactive-shell" },
+      { name: "@tmustier/pi-agent-teams", desc: "Claude Code agent teams style workflow for Pi", author: "tmustier", downloads: 510, tags: ["extension", "skill"], category: "agents", install: "pi install npm:@tmustier/pi-agent-teams" },
+      { name: "pi-messenger", desc: "Inter-agent messaging and file reservation system for pi coding agent", author: "nicopreme", downloads: 708, tags: ["extension"], category: "agents", install: "pi install npm:pi-messenger" },
+      { name: "@rhobot-dev/rho", desc: "AI agent with persistent memory, heartbeat check-ins, and a knowledge vault", author: "rhobot-dev", downloads: 0, tags: ["extension"], category: "agents", install: "pi install npm:@rhobot-dev/rho" },
+
+      // 🔌 Model Providers
+      { name: "@aliou/pi-synthetic", desc: "Add Synthetic (synthetic.new) as a model provider - access open-source models through OpenAI-compatible API", author: "aliou", downloads: 755, tags: ["extension"], category: "providers", install: "pi install npm:@aliou/pi-synthetic" },
+      { name: "pi-cline-free-models", desc: "Use Cline models as a provider in Pi", author: "ditfetzt", downloads: 521, tags: ["extension"], category: "providers", install: "pi install npm:pi-cline-free-models" },
+      { name: "pi-gitlab-duo", desc: "GitLab Duo provider extension for pi", author: "badlogic", downloads: 479, tags: ["extension"], category: "providers", install: "pi install npm:pi-gitlab-duo" },
+      { name: "pi-antigravity-quota", desc: "Check Google Cloud Code (Antigravity) model quotas", author: "ditfetzt", downloads: 0, tags: ["extension"], category: "providers", install: "pi install npm:pi-antigravity-quota" },
+      { name: "@benvargas/pi-synthetic-provider", desc: "Synthetic model provider with dynamic model fetching, reasoning, vision, and tools support", author: "benvargas", downloads: 0, tags: ["extension"], category: "providers", install: "pi install npm:@benvargas/pi-synthetic-provider" },
+
+      // 🌐 Web & Search
+      { name: "pi-web-access", desc: "Web search, URL fetching, GitHub repo cloning, PDF extraction, YouTube video understanding, and local video analysis", author: "nicopreme", downloads: 908, tags: ["extension", "skill"], category: "web", install: "pi install npm:pi-web-access", featured: true },
+      { name: "@aliou/pi-linkup", desc: "Web search and content fetching using the Linkup API", author: "aliou", downloads: 513, tags: ["extension", "skill"], category: "web", install: "pi install npm:@aliou/pi-linkup" },
+      { name: "pi-amplike", desc: "Amp Code-like workflows: handoff, session query, web search, visit webpage", author: "pasky", downloads: 130, tags: ["extension", "skill"], category: "web", install: "pi install npm:pi-amplike" },
+      { name: "@yofriadi/pi-web-search", desc: "Web search extension package for pi", author: "yofriadi", downloads: 0, tags: ["extension"], category: "web", install: "pi install npm:@yofriadi/pi-web-search" },
+
+      // 🛡️ Security & Safety
+      { name: "@aliou/pi-guardrails", desc: "Security hooks to prevent potentially dangerous operations", author: "aliou", downloads: 1712, tags: ["extension"], category: "security", install: "pi install npm:@aliou/pi-guardrails", featured: true },
+      { name: "@aliou/pi-toolchain", desc: "Opinionated toolchain enforcement - transparently rewrites commands to use preferred tools", author: "aliou", downloads: 560, tags: ["extension"], category: "security", install: "pi install npm:@aliou/pi-toolchain" },
+      { name: "pi-bash-confirm", desc: "Confirm bash commands before execution with Telegram notifications", author: "matteo.collina", downloads: 0, tags: ["extension"], category: "security", install: "pi install npm:pi-bash-confirm" },
+
+      // 🖥️ UI & TUI
+      { name: "pi-powerline-footer", desc: "Powerline-style status bar extension for pi coding agent", author: "nicopreme", downloads: 2167, tags: ["extension"], category: "ui", install: "pi install npm:pi-powerline-footer" },
+      { name: "@marckrenn/pi-sub-bar", desc: "Usage widget - shows current provider usage above the editor", author: "marc_krenn", downloads: 869, tags: ["extension"], category: "ui", install: "pi install npm:@marckrenn/pi-sub-bar" },
+      { name: "@tmustier/pi-files-widget", desc: "In-terminal file browser and viewer for Pi", author: "tmustier", downloads: 913, tags: ["extension"], category: "ui", install: "pi install npm:@tmustier/pi-files-widget" },
+      { name: "pi-screenshots-picker", desc: "Screenshot picker - quickly select and attach screenshots to your prompts", author: "graffioh", downloads: 2581, tags: ["extension"], category: "ui", install: "pi install npm:pi-screenshots-picker" },
+      { name: "@tmustier/pi-tab-status", desc: "Terminal tab status indicators for Pi sessions", author: "tmustier", downloads: 238, tags: ["extension"], category: "ui", install: "pi install npm:@tmustier/pi-tab-status" },
+      { name: "pi-annotate", desc: "Visual annotation tool with inline note cards", author: "nicopreme", downloads: 688, tags: ["extension"], category: "ui", install: "pi install npm:pi-annotate" },
+      { name: "@juanibiapina/pi-powerbar", desc: "Persistent powerline status bar with left/right segments updated via events", author: "juanibiapina", downloads: 0, tags: ["extension"], category: "ui", install: "pi install npm:@juanibiapina/pi-powerbar" },
+
+      // 🔧 Developer Tools
+      { name: "pi-mcp-adapter", desc: "MCP (Model Context Protocol) adapter extension for Pi", author: "nicopreme", downloads: 1754, tags: ["extension"], category: "devtools", install: "pi install npm:pi-mcp-adapter" },
+      { name: "@aliou/pi-processes", desc: "Manage background processes - start dev servers, build watchers, log tailers without blocking", author: "aliou", downloads: 1108, tags: ["extension"], category: "devtools", install: "pi install npm:@aliou/pi-processes" },
+      { name: "pi-super-curl", desc: "HTTP request extension with auto-config, JWT generation, and named endpoints", author: "graffioh", downloads: 1224, tags: ["extension"], category: "devtools", install: "pi install npm:pi-super-curl" },
+      { name: "pi-review-loop", desc: "Automated code review loop extension", author: "nicopreme", downloads: 920, tags: ["extension"], category: "devtools", install: "pi install npm:pi-review-loop" },
+      { name: "pi-extmgr", desc: "Enhanced UX for managing local Pi extensions and community packages", author: "ayagmar", downloads: 1268, tags: ["extension"], category: "devtools", install: "pi install npm:pi-extmgr" },
+      { name: "@aliou/pi-extension-dev", desc: "Tools and commands for developing and updating Pi extensions", author: "aliou", downloads: 606, tags: ["extension", "skill", "prompt"], category: "devtools", install: "pi install npm:@aliou/pi-extension-dev" },
+      { name: "pi-interview", desc: "Interactive interview form extension for gathering requirements", author: "nicopreme", downloads: 882, tags: ["extension"], category: "devtools", install: "pi install npm:pi-interview" },
+      { name: "pi-fzf", desc: "Fuzzy finding - define commands that list candidates from any shell command", author: "kaofelix", downloads: 0, tags: ["extension"], category: "devtools", install: "pi install npm:pi-fzf" },
+      { name: "@yofriadi/pi-ast", desc: "Integration with ast-grep (sg) for code analysis", author: "yofriadi", downloads: 0, tags: ["extension"], category: "devtools", install: "pi install npm:@yofriadi/pi-ast" },
+      { name: "@yofriadi/pi-lsp", desc: "LSP integration work scaffold for pi", author: "yofriadi", downloads: 0, tags: ["extension"], category: "devtools", install: "pi install npm:@yofriadi/pi-lsp" },
+      { name: "@yofriadi/pi-mcp", desc: "Standalone MCP extension package for pi", author: "yofriadi", downloads: 0, tags: ["extension"], category: "devtools", install: "pi install npm:@yofriadi/pi-mcp" },
+      { name: "@juanibiapina/pi-plan", desc: "Plan mode - read-only exploration and analysis", author: "juanibiapina", downloads: 0, tags: ["extension"], category: "devtools", install: "pi install npm:@juanibiapina/pi-plan" },
+      { name: "@juanibiapina/pi-files", desc: "Tracks files read/written/edited by the agent", author: "juanibiapina", downloads: 0, tags: ["extension"], category: "devtools", install: "pi install npm:@juanibiapina/pi-files" },
+      { name: "@juanibiapina/pi-extension-settings", desc: "Centralized settings management across extensions", author: "juanibiapina", downloads: 0, tags: ["extension"], category: "devtools", install: "pi install npm:@juanibiapina/pi-extension-settings" },
+
+      // 🔗 Integrations
+      { name: "pi-opensync-plugin", desc: "Sync sessions to OpenSync dashboards", author: "joshthomas", downloads: 208, tags: ["extension"], category: "integrations", install: "pi install npm:pi-opensync-plugin" },
+      { name: "pi-notify", desc: "Desktop notifications via OSC 777/99/9 and Windows toast", author: "ferologics", downloads: 1007, tags: ["extension"], category: "integrations", install: "pi install npm:pi-notify" },
+      { name: "@benvargas/pi-antigravity-image-gen", desc: "Google Antigravity image generation via Gemini and Imagen models with inline terminal rendering", author: "benvargas", downloads: 479, tags: ["extension"], category: "integrations", install: "pi install npm:@benvargas/pi-antigravity-image-gen" },
+
+      // 📊 Usage & Analytics
+      { name: "@marckrenn/pi-sub-core", desc: "Shared usage data core for pi extensions", author: "marc_krenn", downloads: 891, tags: ["extension"], category: "analytics", install: "pi install npm:@marckrenn/pi-sub-core" },
+      { name: "@tmustier/pi-usage-extension", desc: "Usage statistics dashboard for Pi sessions", author: "tmustier", downloads: 128, tags: ["extension"], category: "analytics", install: "pi install npm:@tmustier/pi-usage-extension" },
+
+      // 🎨 Themes
+      { name: "@aliou/pi-theme-jellybeans", desc: "Jellybeans color theme for Pi", author: "aliou", downloads: 254, tags: ["theme"], category: "themes", install: "pi install npm:@aliou/pi-theme-jellybeans" },
+      { name: "@zenobius/pi-rose-pine", desc: "Rose Pine themes for Pi Coding Agent", author: "airtonix", downloads: 152, tags: ["theme"], category: "themes", install: "pi install npm:@zenobius/pi-rose-pine" },
+
+      // 📦 Bundles & Collections
+      { name: "mitsupi", desc: "Armin Ronacher's commands, skills, extensions, and themes bundle", author: "mitsuhiko", downloads: 825, tags: ["extension", "skill", "theme", "prompt"], category: "bundles", install: "pi install npm:mitsupi", featured: true },
+      { name: "pi-extensions", desc: "Personal extensions collection for Pi", author: "tmustier", downloads: 1023, tags: ["extension", "skill"], category: "bundles", install: "pi install npm:pi-extensions" },
+      { name: "shitty-extensions", desc: "Custom extensions and skills for pi coding agent", author: "hjanuschka", downloads: 1115, tags: ["extension"], category: "bundles", install: "pi install npm:shitty-extensions" },
+      { name: "pi-agent-extensions", desc: "Collection of extensions for pi coding agent", author: "jayshah96", downloads: 0, tags: ["extension"], category: "bundles", install: "pi install npm:pi-agent-extensions" },
+      { name: "pi-shit", desc: "Personal Pi package bundling extensions, skills, and Rose Pine themes", author: "unknown", downloads: 0, tags: ["extension"], category: "bundles", install: "pi install npm:pi-shit" },
+
+      // 🔊 Audio
+      { name: "@jay-zod/speak", desc: "Text to speech using Chatterbox TTS on Apple Silicon", author: "jay-zod", downloads: 128, tags: ["skill"], category: "audio", install: "pi install npm:@jay-zod/speak" },
+
+      // 🧭 Discovery
+      { name: "@benvargas/pi-ancestor-discovery", desc: "Recursive ancestor discovery for pi resources (skills, prompts, themes)", author: "benvargas", downloads: 577, tags: ["extension"], category: "discovery", install: "pi install npm:@benvargas/pi-ancestor-discovery" },
+      { name: "pi-prompt-template-model", desc: "Prompt template model selector extension", author: "nicopreme", downloads: 496, tags: ["extension"], category: "discovery", install: "pi install npm:pi-prompt-template-model" },
+
+      // 🧪 Test & Demo
+      { name: "pi-package-test", desc: "Test package with extensions, skills, themes, and prompts", author: "badlogic", downloads: 687, tags: ["extension", "skill", "theme", "prompt"], category: "test", install: "pi install npm:pi-package-test" },
+    ];
+
+    const categories = {
+      fun: { icon: "🎮", title: "Fun & Games" },
+      agents: { icon: "🤖", title: "Subagents & Multi-Agent" },
+      providers: { icon: "🔌", title: "Model Providers" },
+      web: { icon: "🌐", title: "Web & Search" },
+      security: { icon: "🛡️", title: "Security & Safety" },
+      ui: { icon: "🖥️", title: "UI & TUI" },
+      devtools: { icon: "🔧", title: "Developer Tools" },
+      integrations: { icon: "🔗", title: "Integrations" },
+      analytics: { icon: "📊", title: "Usage & Analytics" },
+      themes: { icon: "🎨", title: "Themes" },
+      bundles: { icon: "📦", title: "Bundles & Collections" },
+      audio: { icon: "🔊", title: "Audio" },
+      discovery: { icon: "🧭", title: "Discovery" },
+      test: { icon: "🧪", title: "Test & Demo" }
+    };
+
+    let currentFilter = "all";
+    let searchQuery = "";
+
+    function copyToClipboard(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = "✓";
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.textContent = "📋";
+          btn.classList.remove("copied");
+        }, 2000);
+      });
+    }
+
+    function renderCard(ext) {
+      const tagsHtml = ext.tags.map(t => `<span class="tag ${t}">${t}</span>`).join("");
+      return `
+        <div class="extension-card${ext.featured ? ' featured' : ''}" onclick="window.open('https://www.npmjs.com/package/${ext.name}', '_blank')">
+          <div class="card-header">
+            <div class="card-title">${ext.name}</div>
+            <div class="card-downloads">⬇️ ${ext.downloads.toLocaleString()}/mo</div>
+          </div>
+          <div class="card-description">${ext.desc}</div>
+          <div class="card-footer">
+            <div class="card-tags">${tagsHtml}</div>
+            <div class="card-author">by <span>${ext.author}</span></div>
+          </div>
+          <div class="install-cmd">
+            <code>$ ${ext.install}</code>
+            <button class="copy-btn" onclick="event.stopPropagation(); copyToClipboard('${ext.install}', this)">📋</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function render() {
+      const filtered = extensions.filter(ext => {
+        const matchesFilter = currentFilter === "all" || ext.tags.includes(currentFilter);
+        const matchesSearch = !searchQuery || 
+          ext.name.toLowerCase().includes(searchQuery) ||
+          ext.desc.toLowerCase().includes(searchQuery) ||
+          ext.author.toLowerCase().includes(searchQuery);
+        return matchesFilter && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        document.getElementById("content").innerHTML = `
+          <div class="no-results">
+            <h3>No extensions found</h3>
+            <p>Try adjusting your search or filter criteria</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Group by category
+      const grouped = {};
+      filtered.forEach(ext => {
+        if (!grouped[ext.category]) grouped[ext.category] = [];
+        grouped[ext.category].push(ext);
+      });
+
+      // Sort each category by downloads
+      Object.values(grouped).forEach(arr => arr.sort((a, b) => b.downloads - a.downloads));
+
+      let html = "";
+      for (const [cat, exts] of Object.entries(grouped)) {
+        const catInfo = categories[cat] || { icon: "📦", title: cat };
+        html += `
+          <div class="category-section">
+            <div class="category-header">
+              <span class="category-icon">${catInfo.icon}</span>
+              <span class="category-title">${catInfo.title}</span>
+              <span class="category-count">${exts.length}</span>
+            </div>
+            <div class="extensions-grid">
+              ${exts.map(renderCard).join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      document.getElementById("content").innerHTML = html;
+    }
+
+    // Event handlers
+    document.querySelectorAll(".chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        currentFilter = chip.dataset.filter;
+        render();
+      });
+    });
+
+    document.getElementById("search").addEventListener("input", (e) => {
+      searchQuery = e.target.value.toLowerCase();
+      render();
+    });
+
+    // Initial render
+    render();
+  </script>
+</body>
+</html>

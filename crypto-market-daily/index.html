@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Market Daily — Quantitative Analysis</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', Georgia, serif;
+            background: #f8f6f1;
+            color: #2a2a2a;
+            line-height: 1.85;
+            padding: 2rem;
+        }
+        
+        /* Paper texture */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .masthead {
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #2a2a2a;
+            text-align: center;
+        }
+        
+        .publication-name {
+            font-size: 0.75rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .publication-tagline {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #555;
+        }
+        
+        .date-time {
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            color: #888;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .headline {
+            font-size: 2.5rem;
+            font-weight: 600;
+            line-height: 1.2;
+            margin: 3rem 0 1rem;
+        }
+        
+        .subheadline {
+            font-size: 1.3rem;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 2rem;
+            max-width: 700px;
+        }
+        
+        .divider {
+            width: 60px;
+            height: 2px;
+            background: #2a2a2a;
+            margin: 2rem 0;
+        }
+        
+        .section {
+            margin: 3rem 0;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #1a1a1a;
+        }
+        
+        .article {
+            margin-bottom: 2.5rem;
+        }
+        
+        .article-headline {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-details {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 1rem;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .article-body {
+            font-size: 1.05rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        
+        .ticker {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+            border-left: 3px solid #2a2a2a;
+            padding-left: 2rem;
+        }
+        
+        .ticker-item {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 1.5rem;
+        }
+        
+        .ticker-symbol {
+            font-weight: 600;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .ticker-price {
+            font-size: 1.3rem;
+            margin: 0.3rem 0;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .ticker-change {
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .positive {
+            color: #2a5a2a;
+        }
+        
+        .negative {
+            color: #8a2a2a;
+        }
+        
+        .neutral {
+            color: #5a5a5a;
+        }
+        
+        .funding-rate-box {
+            background: #f0ebe5;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.95rem;
+        }
+        
+        .funding-label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        
+        .analysis-box {
+            background: #faf8f3;
+            border-left: 3px solid #2a2a2a;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .analysis-box h3 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+        }
+        
+        .analysis-text {
+            font-size: 1.05rem;
+            color: #333;
+        }
+        
+        .footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid #2a2a2a;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #999;
+        }
+        
+        .update-badge {
+            display: inline-block;
+            background: #2a2a2a;
+            color: #f8f6f1;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        @media (max-width: 768px) {
+            .masthead {
+                margin-bottom: 2rem;
+            }
+            
+            .headline {
+                font-size: 1.8rem;
+            }
+            
+            .subheadline {
+                font-size: 1.1rem;
+            }
+            
+            .ticker {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="masthead">
+        <div class="publication-name">CRYPTO MARKET DAILY</div>
+        <div class="publication-tagline">Quantitative Analysis & Market Intelligence</div>
+        <div class="date-time" id="current-date"></div>
+    </div>
+    
+    <div class="container">
+        <div class="update-badge" id="update-time">Latest Update</div>
+        
+        <h1 class="headline">Market in Rotation Mode</h1>
+        <p class="subheadline">Selective altcoin strength, SOL short squeeze, majors consolidating</p>
+        
+        <div class="divider"></div>
+        
+        <!-- GAINERS SECTION -->
+        <section class="section">
+            <h2 class="section-title">🚀 Top Gainers & Funding Rates</h2>
+            
+            <div class="article">
+                <h3 class="article-headline">Ethena (ENA) Leads Rally</h3>
+                <div class="article-details">Symbol: ENA | 24H: +11.30% | Price: $0.7428 | Volume: $1.36B</div>
+                <div class="funding-rate-box">
+                    <span class="funding-label">Perpetual Funding:</span>
+                    Negative range (-0.01% to -0.03%) — shorts profitable
+                </div>
+                <p class="article-body">
+                    Ethena's robust gains on elevated volume suggest institutional accumulation. 
+                    Negative funding indicates profit-taking pressure from long positions, yet momentum 
+                    persists—hallmark of a healthy, non-parabolic move.
+                </p>
+            </div>
+            
+            <div class="ticker">
+                <div class="ticker-item">
+                    <div class="ticker-symbol">PYTH</div>
+                    <div class="ticker-change positive">↑ +8.38%</div>
+                    <div class="ticker-price">$0.1612</div>
+                    <div class="funding-rate-box"><span class="funding-label">Funding: +0.005%</span></div>
+                </div>
+                
+                <div class="ticker-item">
+                    <div class="ticker-symbol">OKB</div>
+                    <div class="ticker-change positive">↑ +8.27%</div>
+                    <div class="ticker-price">$194.03</div>
+                    <div class="funding-rate-box"><span class="funding-label">Funding: Positive</span></div>
+                </div>
+                
+                <div class="ticker-item">
+                    <div class="ticker-symbol">WLFI</div>
+                    <div class="ticker-change positive">↑ +6.80%</div>
+                    <div class="ticker-price">$0.1959</div>
+                    <div class="funding-rate-box"><span class="funding-label">Funding: +0.005%</span></div>
+                </div>
+                
+                <div class="ticker-item">
+                    <div class="ticker-symbol">PUMP</div>
+                    <div class="ticker-change positive">↑ +4.47%</div>
+                    <div class="ticker-price">$0.00474</div>
+                    <div class="funding-rate-box"><span class="funding-label">Funding: +0.01%</span></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- LOSERS SECTION -->
+        <section class="section">
+            <h2 class="section-title">🔴 Top Losers & Funding Rates</h2>
+            
+            <div class="article">
+                <h3 class="article-headline">Strategic Oil Supply (SOS) Collapses</h3>
+                <div class="article-details">Symbol: SOS | 24H: -34.2% ⚠️ | Price: $0.00108 | Volume: $328.8K</div>
+                <div class="funding-rate-box">
+                    <span class="funding-label">Liquidity Alert:</span>
+                    Illiquid wreck—avoid until recovery signals
+                </div>
+                <p class="article-body">
+                    Severe decline on minimal volume suggests forced liquidations or fundamental project failure.
+                </p>
+            </div>
+            
+            <div class="ticker">
+                <div class="ticker-item">
+                    <div class="ticker-symbol">KNTQ</div>
+                    <div class="ticker-change negative">↓ -21.2%</div>
+                    <div class="ticker-price">$0.1141</div>
+                    <div class="funding-rate-box"><span class="funding-label">Status: Illiquid</span></div>
+                </div>
+                
+                <div class="ticker-item">
+                    <div class="ticker-symbol">FRAX</div>
+                    <div class="ticker-change negative">↓ -17.7%</div>
+                    <div class="ticker-price">$0.5025</div>
+                    <div class="funding-rate-box"><span class="funding-label">Funding: Negative</span></div>
+                </div>
+                
+                <div class="ticker-item">
+                    <div class="ticker-symbol">H</div>
+                    <div class="ticker-change negative">↓ -9.0%</div>
+                    <div class="ticker-price">$0.09368</div>
+                    <div class="funding-rate-box"><span class="funding-label">Funding: Negative</span></div>
+                </div>
+                
+                <div class="ticker-item">
+                    <div class="ticker-symbol">BTR</div>
+                    <div class="ticker-change negative">↓ -8.7%</div>
+                    <div class="ticker-price">$0.1226</div>
+                    <div class="funding-rate-box"><span class="funding-label">Signal: L2 overcrowding</span></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- THE MAJORS SECTION -->
+        <section class="section">
+            <h2 class="section-title">📈 The Majors: BTC / ETH / SOL</h2>
+            
+            <div class="ticker">
+                <div class="ticker-item">
+                    <div class="ticker-symbol">BTC</div>
+                    <div class="ticker-change positive">↑ +2.57%</div>
+                    <div class="ticker-price">$120,580</div>
+                    <div class="funding-rate-box"><span class="funding-label">Funding (8h): +0.0100%</span></div>
+                    <p style="margin-top: 0.5rem; font-size: 0.95rem;"><strong>Vibe:</strong> Neutral; consolidation strength.</p>
+                </div>
+                
+                <div class="ticker-item">
+                    <div class="ticker-symbol">ETH</div>
+                    <div class="ticker-change positive">↑ +3.54%</div>
+                    <div class="ticker-price">$4,488</div>
+                    <div class="funding-rate-box"><span class="funding-label">Funding (8h): +0.0100%</span></div>
+                    <p style="margin-top: 0.5rem; font-size: 0.95rem;"><strong>Vibe:</strong> Outperforming BTC; strong ratio.</p>
+                </div>
+                
+                <div class="ticker-item">
+                    <div class="ticker-symbol">SOL</div>
+                    <div class="ticker-change positive">↑ +5.75%</div>
+                    <div class="ticker-price">$232</div>
+                    <div class="funding-rate-box"><span class="funding-label">Funding: EXTREME DIVERGENCE</span><div style="margin-top: 0.3rem; font-size: 0.9rem; color: #8a2a2a;">Binance: +0.01% | Bybit: -9.47%</div></div>
+                    <p style="margin-top: 0.5rem; font-size: 0.95rem;"><strong>Alert:</strong> Aggressive short squeeze happening.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- MARKET SYNTHESIS -->
+        <section class="section">
+            <h2 class="section-title">💭 Market Synthesis</h2>
+            
+            <div class="analysis-box">
+                <h3>Structured Short Squeeze + Healthy Rotation</h3>
+                <p class="analysis-text">
+                    Market is <strong>neither over-leveraged nor fragile</strong>. Altcoin funding rates remain modest 
+                    (+0.005% to +0.03%), indicating measured bullish positioning. SOL's extreme negative funding (-9%) 
+                    paired with +5.75% gains = textbook deleveraging of oversold shorts. BTC/ETH at neutral 0.01% 
+                    contradicts any "market is overlevered" thesis. Instead: selective sector rotation (exchange tokens > 
+                    oracles/AI) and targeted short squeezes offsetting new leverage.
+                </p>
+            </div>
+            
+            <div class="analysis-box">
+                <h3>What's Next?</h3>
+                <p class="analysis-text">
+                    Expect minor pullback or tight consolidation before next leg. BTC dominance climbing, ETH/SOL 
+                    divergence narrowing. Altcoins with low funding rates (ENA, PYTH, WLFI) positioned for continued 
+                    outperformance if macro sentiment stays positive.
+                </p>
+            </div>
+        </section>
+        
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>Data sourced from Binance, CoinMarketCap, CoinGecko, Coinalyze, and CoinGlass. This analysis is 
+            for informational purposes only and does not constitute investment advice.</p>
+            <p style="margin-top: 1rem; font-size: 0.8rem; color: #bbb;">
+                Manual updates every report cycle. Last refreshed: <span id="refresh-time"></span>
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Update date/time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'UTC'
+            };
+            document.getElementById('current-date').textContent = 
+                'Published: ' + now.toLocaleDateString('en-US', options) + ' UTC';
+            document.getElementById('refresh-time').textContent = now.toLocaleTimeString('en-US', {timeZone: 'UTC'});
+        }
+        
+        updateDateTime();
+        
+        // e-ink flicker on scroll
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+            if (Math.abs(currentScroll - lastScroll) > 150) {
+                document.body.style.opacity = '0.98';
+                setTimeout(() => { document.body.style.opacity = '1'; }, 120);
+                lastScroll = currentScroll;
+            }
+        });
+    </script>
+</body>
+</html>

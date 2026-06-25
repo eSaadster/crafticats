@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klaus (aka Claws) - AI Personal Assistant Architecture</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --klaus-red: #E63946;
+            --klaus-gold: #D4AF37;
+            --cream: #FFFDD0;
+            --maastricht-blue: #002233;
+            --lawn-green: #7CFC00;
+            --text-dark: #1a1a2e;
+            --text-light: #4a4a6a;
+            --border: #e0e0e0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--maastricht-blue), #1a3a4a);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        header::after {
+            content: '🦀';
+            font-size: 60px;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            opacity: 0.3;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--klaus-gold);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            color: var(--cream);
+        }
+
+        nav {
+            background: var(--klaus-red);
+            padding: 15px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            list-style: none;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: var(--maastricht-blue);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--klaus-gold);
+        }
+
+        h3 {
+            color: var(--klaus-red);
+            font-size: 1.4rem;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: var(--maastricht-blue);
+            font-size: 1.1rem;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.9em;
+            color: var(--maastricht-blue);
+        }
+
+        pre {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border-left: 4px solid var(--klaus-gold);
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        .mermaid {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: var(--maastricht-blue);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .diagram-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid var(--klaus-red);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .feature-card h4 {
+            color: var(--klaus-red);
+            margin-top: 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .badge-primary { background: var(--klaus-red); color: white; }
+        .badge-secondary { background: var(--klaus-gold); color: var(--maastricht-blue); }
+        .badge-accent { background: var(--lawn-green); color: var(--maastricht-blue); }
+
+        footer {
+            background: var(--maastricht-blue);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        footer p {
+            color: rgba(255,255,255,0.7);
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            nav ul {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Klaus (aka Claws)</h1>
+            <p class="subtitle">AI Personal Assistant Architecture Documentation</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#whatsapp">WhatsApp Layer</a></li>
+                <li><a href="#routing">Message Routing</a></li>
+                <li><a href="#agents">Agent System</a></li>
+                <li><a href="#memory">Memory Architecture</a></li>
+                <li><a href="#tools">Tools & Extensions</a></li>
+                <li><a href="#background">Background Systems</a></li>
+                <li><a href="#session">Session Management</a></li>
+                <li><a href="#config">Configuration</a></li>
+                <li><a href="#setup">Setup & Installation</a></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <section id="overview">
+                <h2>Overview</h2>
+                <p>Klaus (also known as Claws) is a sophisticated WhatsApp-based AI personal assistant built on the Warelay platform. It connects WhatsApp messaging to advanced AI agents, enabling intelligent, stateful conversations with tool access, memory persistence, and an extensible skill system.</p>
+
+                <div class="diagram-container">
+                    <h3>Architecture Summary</h3>
+                    <div class="mermaid">
+flowchart TD
+    subgraph WhatsApp[WhatsApp Layer]
+        Baileys[Baileys WebSocket]
+    end
+    
+    subgraph Router[Message Router]
+        Direction[Message Router]
+        Allow[Allowlist validation]
+        Group[Group mention detection]
+        Transcribe[Audio transcription]
+        Session[Session management]
+    end
+    
+    subgraph Agent[Agent Dispatcher]
+        Text[Text Mode]
+        Command[Command Mode]
+        Pi[Pi-Agent Primary AI]
+    end
+    
+    subgraph Tool[Tool Layer]
+        Builtin[Built-in Tools]
+        MCP[MCP Servers mcporter]
+        Skills[Skills System]
+    end
+    
+    subgraph Background[Background Systems]
+        Clicks[Clicks Scheduler]
+        Grips[Grips System Long-running tasks]
+        Memory[Memory Extraction Summarization]
+        Watchers[Watchers Event triggers]
+    end
+    
+    Baileys --> Direction
+    Direction --> Allow
+    Allow --> Group
+    Group --> Transcribe
+    Transcribe --> Session
+    Session --> Text
+    Session --> Command
+    Session --> Pi
+    Pi --> Builtin
+    Pi --> MCP
+    Pi --> Skills
+    Clicks --> Session
+    Grips --> Session
+    Memory --> Session
+    Watchers --> Session
+                    </div>
+                </div>
+            </section>
+
+            <section id="whatsapp">
+                <h2>WhatsApp Integration Layer</h2>
+                <p>Klaus connects to WhatsApp through Baileys (WhatsApp Web).</p>
+
+                <h3>Baileys WebSocket</h3>
+                <ul>
+                    <li><strong>Technology:</strong> Baileys library for WhatsApp Web scraping</li>
+                    <li><strong>Advantages:</strong> Fast setup, no external provider credentials</li>
+                    <li><strong>Use Case:</strong> Personal assistant scenarios with direct WhatsApp access</li>
+                    <li><strong>Session Management:</strong> Auth credentials stored in <code>~/.warelay/credentials/</code></li>
+                </ul>
+            </section>
+
+            <section id="routing">
+                <h2>Message Routing & Processing</h2>
+                <p>The message router handles incoming WhatsApp messages through a structured pipeline:</p>
+
+                <div class="diagram-container">
+                    <div class="mermaid">
+flowchart LR
+    A[Message Received] --> B[Parse Metadata sender body media group context]
+    B --> C[Deduplicate by message ID]
+    C --> D[Store Media to temporary disk]
+    D --> E[Validation allowlist check]
+    E --> F[Group Mention Check for klaus in groups]
+    F --> G[Audio Transcription if configured]
+    G --> H[Session Management load or create]
+    H --> I[Agent Dispatch text command pi-agent]
+    I --> J[Response Processing media optimization parsing]
+    J --> K[Send Response with typing indicators]
+    K --> L[Persistence save session state]
+                    </div>
+                </div>
+            </section>
+
+            <section id="agents">
+                <h2>Agent System</h2>
+
+                <h3>Pi-Agent (Primary AI Engine)</h3>
+                <p>The main conversational AI engine powering Klaus.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Default Model</strong></td>
+                            <td>Claude Opus 4.5 (<code>claude-opus-4-5</code>)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fallback Model</strong></td>
+                            <td>Same as default if configured model ID is missing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Provider</strong></td>
+                            <td>Multi-provider (Anthropic, Google, OpenAI, Mistral, custom)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mode</strong></td>
+                            <td>Stateful, multi-turn conversations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Instance Model</strong></td>
+                            <td>One agent per sender/conversation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Memory</strong></td>
+                            <td>Entity-based temporal graph</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Thinking Levels</strong></td>
+                            <td>off, minimal, low, medium, high</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Default Timeout</strong></td>
+                            <td>120 seconds</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Idle Timeout</strong></td>
+                            <td>720 minutes (12 hours, triggers extraction)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Message Threshold</strong></td>
+                            <td>300 messages (triggers extraction)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Key Capabilities</h4>
+                <ul>
+                    <li>Full tool access (17+ built-in tools, MCP, skills)</li>
+                    <li>Entity-based memory with temporal validity tracking</li>
+                    <li>Memory query tool for agent self-querying</li>
+                    <li>Automatic memory extraction on idle</li>
+                    <li>Multi-provider model support via <code>~/.pi/agent/models.json</code></li>
+                    <li>OAuth token auto-refresh</li>
+                    <li>Session-specific SYSTEM.md, .env, and skills</li>
+                </ul>
+
+                <h3>Command-Mode Agent</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Supported CLIs</strong></td>
+                            <td>Pi CLI, Claude CLI</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Invocation</strong></td>
+                            <td>Shell command execution</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Session</strong></td>
+                            <td>Pass-through via --session/--continue flags</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Output Formats</strong></td>
+                            <td>text, json, stream-json</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Static Text Agent</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Use Case</strong></td>
+                            <td>Fixed responses, greetings</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Variables</strong></td>
+                            <td>{{Body}}, {{From}}, {{SessionId}}, etc.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Media</strong></td>
+                            <td>Supports attachments</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="memory">
+                <h2>Memory Architecture</h2>
+                <p>Klaus uses a <strong>layered, temporal knowledge graph-based memory system</strong> that replaces legacy recursive summarization.</p>
+
+                <div class="diagram-container">
+                    <div class="mermaid">
+flowchart TB
+    subgraph MemoryLayers[Memory Layers]
+        Working[Working Memory Current context window]
+        Session[Session Memory Recent 25 conversation turns]
+        Entity[Entity Memory Tracked entities with properties]
+        LongTerm[Long-term Knowledge Decisions facts pending tasks]
+    end
+    
+    Working --> Session
+    Session --> Entity
+    Entity --> LongTerm
+                    </div>
+                </div>
+
+                <h3>Memory Storage Structure</h3>
+                <pre><code>~/klaus/whatsapp/{sessionName}/memory/
+├── state.json                    # Session state + recent 25 turns
+├── entities/
+│   ├── index.json               # Fast entity lookup index
+│   └── {entity_id}.json         # Individual entity files
+├── knowledge/
+│   ├── decisions.json           # Agreements, commitments
+│   ├── facts.json               # Context, preferences
+│   └── tasks.json               # Action items with status
+└── relationships.json           # Entity-to-entity connections</code></pre>
+
+                <h3>Entity Memory Schema</h3>
+                <pre><code>{
+  "id": "person_alice_smith",
+  "type": "person",
+  "name": "Alice Smith",
+  "aliases": ["Al", "Alice"],
+  "properties": [{
+    "key": "jobTitle",
+    "value": "Software Engineer at TechCorp",
+    "validFrom": 1703001234567,
+    "validUntil": null,
+    "confidence": 0.9,
+    "source": "extraction_1703001234567"
+  }],
+  "firstSeen": 1703001234567,
+  "lastMentioned": 1703987654321,
+  "mentionCount": 47
+}</code></pre>
+
+                <h3>Temporal Validity Model</h3>
+                <p>All memory items include temporal metadata enabling time-travel queries:</p>
+                <pre><code>interface TemporalValidity {
+  validFrom: number      // When learned
+  validUntil?: number    // When expired (null = still valid)
+  source: string         // Origin (e.g., "extraction_...")
+  confidence: number     // 0.0-1.0 score
+}</code></pre>
+
+                <h3>Memory Query Tool Actions</h3>
+                <ul>
+                    <li><code>search {query}</code>: Find entities by name/alias</li>
+                    <li><code>get {entityId}</code>: Get full entity details with properties</li>
+                    <li><code>history {entityId}</code>: View property changes over time (temporal)</li>
+                    <li><code>related {entityId}</code>: Find connected entities</li>
+                    <li><code>knowledge {type}</code>: Query decisions, facts, or tasks</li>
+                </ul>
+            </section>
+
+            <section id="tools">
+                <h2>Tools & Extensions</h2>
+
+                <h3>Built-in Tools</h3>
+                <p>Tools are created per-session via <code>createTools(sessionName)</code> to ensure proper sandbox isolation.</p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>File Operations</h4>
+                        <ul>
+                            <li><strong>read_file</strong> - Read files from scratchpad or system-wide</li>
+                            <li><strong>write_file</strong> - Write files to scratchpad</li>
+                            <li><strong>list_directory</strong> - List directory contents (system-wide access)</li>
+                            <li><strong>search</strong> - Grep-based pattern search in files</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h4>System & Web</h4>
+                        <ul>
+                            <li><strong>bash</strong> - Execute shell commands (sandboxed via bwrap)</li>
+                            <li><strong>web_search</strong> - Search via Brave Search</li>
+                            <li><strong>web_fetch</strong> - Fetch and parse web content</li>
+                            <li><strong>get_current_time</strong> - Get current timestamp with timezone</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h4>AI & Media</h4>
+                        <ul>
+                            <li><strong>generate_image</strong> - Text-to-image via Gemini</li>
+                            <li><strong>edit_image</strong> - Image editing via Gemini</li>
+                            <li><strong>mcp</strong> - Access MCP tool servers</li>
+                            <li><strong>whatsapp</strong> - Send WhatsApp reactions to messages</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Background Tasks</h4>
+                        <ul>
+                            <li><strong>start_grip</strong> - Start long-running grip (tmux or sleepless)</li>
+                            <li><strong>grip_status</strong> - List active grips</li>
+                            <li><strong>release_grip</strong> - Stop an active grip</li>
+                            <li><strong>grip_list_templates</strong> - List available grip templates</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Scheduled Tasks</h4>
+                        <ul>
+                            <li><strong>create_click</strong> - Create a new scheduled click (recurring task)</li>
+                            <li><strong>list_clicks</strong> - List all clicks for the current session</li>
+                            <li><strong>delete_click</strong> - Delete a click by ID</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Memory</h4>
+                        <ul>
+                            <li><strong>memory_query</strong> - Query entity-based memory system</li>
+                            <li><strong>memory_subscribe</strong> - Subscribe to memory updates</li>
+                            <li><strong>memory_unsubscribe</strong> - Remove a memory subscription</li>
+                            <li><strong>memory_share</strong> - Share entities across spaces</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>MCP Integrations</h3>
+                <p>Model Context Protocol servers accessed via mcporter runtime.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Server</th>
+                            <th>Provider</th>
+                            <th>Capabilities</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Twitter</td>
+                            <td>Composio</td>
+                            <td>Search, post, user lookup</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Skills System</h3>
+                <p>Two-tier extensibility architecture:</p>
+
+                <h4>Convention-Based Skills</h4>
+                <ul>
+                    <li>Discovered from <code>~/klaus/whatsapp/skills/</code> directories</li>
+                    <li>Identified by SKILL.md file presence</li>
+                    <li>Full bash access (sandbox bypass)</li>
+                    <li>Examples: pptx generation, xlsx handling, pdf creation, d3js charts</li>
+                </ul>
+
+                <h4>Programmatic Skills</h4>
+                <ul>
+                    <li>Registered via TypeScript registry</li>
+                    <li>Typed tool definitions</li>
+                    <li>Initialization hooks</li>
+                    <li>Custom system prompt additions</li>
+                </ul>
+            </section>
+
+            <section id="background">
+                <h2>Background Systems</h2>
+
+                <h3>Clicks (Proactive Polling)</h3>
+                <p>Clicks are scheduled, lightweight polling tasks for monitoring and alerts.</p>
+                
+                <div class="diagram-container">
+                    <div class="mermaid">
+flowchart LR
+    A[Clicks.json configuration] --> B[Clicks Scheduler]
+    B --> C[Task Execution every N minutes]
+    C --> D[Session Poke via existing socket]
+    D --> E[Agent Response to trigger]
+                    </div>
+                </div>
+
+                <h3>Grips (Long-Running Tasks)</h3>
+                <p>Grips are long-running tmux sessions with AI monitoring and memory accumulation.</p>
+                
+                <div class="diagram-container">
+                    <div class="mermaid">
+flowchart LR
+    A[start_grip command] --> B[Create tmux session]
+    B --> C[Run grip template with AI agent]
+    C --> D[Periodic polling for updates]
+    D --> E[Memory accumulation across poll cycles]
+    E --> F[User interaction via ask_user flow]
+    F --> G[Release grip when complete]
+                    </div>
+                </div>
+
+                <h3>Watchers (Event Triggers)</h3>
+                <p>External event sources that trigger session pokes.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Watcher</th>
+                            <th>Trigger</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>pm2-logs</td>
+                            <td>PM2 process logs</td>
+                        </tr>
+                        <tr>
+                            <td>webhook</td>
+                            <td>HTTP webhook calls</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="session">
+                <h2>Session Management</h2>
+
+                <h3>Session Isolation</h3>
+                <p>Each session gets its own tool instances with session context captured in closures:</p>
+                <pre><code>// Each session creates its own tools with sessionCwd baked in
+const tools = createTools(sessionName);  // e.g., "@17206598123"
+// Tools use closure-captured sessionCwd, not global state</code></pre>
+
+                <h3>Session Key Derivation</h3>
+                <pre><code>function deriveSessionKey(scope: SessionScope, ctx: MsgContext): string {
+  if (scope === "global") return "global";
+
+  if (ctx.IsGroup && ctx.GroupJid) {
+    if (ctx.GroupName) {
+      return `#${sanitizeGroupName(ctx.GroupName)}`;  // #family-chat
+    }
+    return `#group_${extractGroupId(ctx.GroupJid)}`;  // #group_120363...
+  }
+
+  return `@${normalizeE164(ctx.From).replace(/^\+/, "")}`;  // @17206598123
+}</code></pre>
+
+                <h3>Session Lifecycle</h3>
+                <div class="diagram-container">
+                    <div class="mermaid">
+flowchart TD
+    Creation[Creation] --> Active[Active]
+    Active --> Idle[Idle]
+    Idle --> Summarization[Summarization]
+    Summarization --> Eviction[Eviction]
+    Idle --> Active
+                    </div>
+                </div>
+            </section>
+
+            <section id="config">
+                <h2>Configuration System</h2>
+
+                <h3>Environment Variables</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>PI_AGENT_MODEL</code></td>
+                            <td>No</td>
+                            <td>Model override for Pi-Agent</td>
+                        </tr>
+                        <tr>
+                            <td><code>GEMINI_API_KEY</code></td>
+                            <td>No</td>
+                            <td>API key for Google Gemini</td>
+                        </tr>
+                        <tr>
+                            <td><code>USE_ENTITY_MEMORY</code></td>
+                            <td>No</td>
+                            <td>Enable entity-based memory system</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Configuration Files</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Location</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>.env</code></td>
+                            <td>Project root</td>
+                            <td>Optional API credentials</td>
+                        </tr>
+                        <tr>
+                            <td><code>warelay.json</code></td>
+                            <td><code>~/.warelay/</code></td>
+                            <td>Global configuration</td>
+                        </tr>
+                        <tr>
+                            <td><code>sessions.json</code></td>
+                            <td><code>~/.warelay/</code></td>
+                            <td>Session management data</td>
+                        </tr>
+                        <tr>
+                            <td><code>mcporter.json</code></td>
+                            <td><code>~/klaus/whatsapp/</code></td>
+                            <td>MCP server configurations</td>
+                        </tr>
+                        <tr>
+                            <td><code>models.json</code></td>
+                            <td><code>~/.pi/agent/</code></td>
+                            <td>Custom AI model definitions</td>
+                        </tr>
+                        <tr>
+                            <td><code>oauth.json</code></td>
+                            <td><code>~/.pi/agent/</code></td>
+                            <td>OAuth token cache</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="setup">
+                <h2>Setup & Installation</h2>
+
+                <h3>Prerequisites</h3>
+                <ul>
+                    <li>Node.js 22+</li>
+                    <li>npm or pnpm package manager</li>
+                    <li>Optional: API keys for model providers</li>
+                    <li>Optional: Claude CLI for command mode</li>
+                    <li>Optional: Tailscale for webhook setup</li>
+                </ul>
+
+                <h3>Installation Steps</h3>
+                <pre><code># Global installation
+npm install -g warelay
+
+# Or from source
+git clone <repository>
+cd warelay
+pnpm install
+
+# Link personal WhatsApp Web
+warelay login
+
+# Start relay with auto-reply
+warelay relay --provider web --verbose</code></pre>
+
+                <h3>Configuration</h3>
+                <ol>
+                    <li>Copy <code>.env.example</code> to <code>.env</code> and configure API keys as needed</li>
+                    <li>Create <code>warelay.json</code> in <code>~/.warelay/</code> directory:</li>
+                </ol>
+                <pre><code>{
+  "inbound": {
+    "allowFrom": ["+12345550000"],
+    "reply": {
+      "mode": "command",
+      "bodyPrefix": "You are a concise WhatsApp assistant.\n\n",
+      "command": ["claude", "--dangerously-skip-permissions", "{{BodyStripped}}"],
+      "claudeOutputFormat": "text",
+      "session": { 
+        "scope": "per-sender", 
+        "resetTriggers": ["/new"], 
+        "idleMinutes": 60 
+      }
+    }
+  },
+  "logging": {
+    "level": "debug",
+    "file": "/tmp/warelay/warelay.log"
+  }
+}</code></pre>
+            </section>
+        </div>
+
+        <footer>
+            <p>Klaus (クラウス) — Lateral-thinking engineering assistant 🦀</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Built on Warelay platform</p>
+        </footer>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#002233',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#D4AF37',
+                lineColor: '#E63946',
+                secondaryColor: '#FFFDD0',
+                tertiaryColor: '#f8f9fa'
+            }
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rust vs TypeScript — Engineering Tradeoffs</title>
+  <style>
+    :root {
+      --crab: #D04040;
+      --gold: #D4AF37;
+      --paper: #F0EAD6;
+      --ink: #171412;
+      --muted: #6f6359;
+      --rust: #b7410e;
+      --ts: #3178c6;
+      --card: rgba(255,255,255,.58);
+      --line: rgba(23,20,18,.14);
+      --shadow: 0 24px 70px rgba(23,20,18,.16);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(208,64,64,.16), transparent 30%),
+        radial-gradient(circle at 85% 8%, rgba(49,120,198,.15), transparent 28%),
+        linear-gradient(135deg, #f8f2e2 0%, var(--paper) 48%, #eadfc6 100%);
+      min-height: 100vh;
+    }
+    body:before {
+      content: "";
+      position: fixed; inset: 0; pointer-events: none; opacity: .35;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+    .wrap { width: min(1180px, calc(100% - 34px)); margin: 0 auto; padding: 28px 0 70px; position: relative; }
+    nav {
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      padding: 12px 0 28px;
+      color: var(--muted); font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .seal { display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 10px; background: var(--crab); color: #fff; font-weight: 900; box-shadow: 0 10px 30px rgba(208,64,64,.28); letter-spacing: 0; }
+    .hero { display: grid; grid-template-columns: 1.05fr .95fr; gap: 26px; align-items: stretch; }
+    .panel {
+      background: var(--card); border: 1px solid var(--line); border-radius: 30px; box-shadow: var(--shadow);
+      backdrop-filter: blur(18px); overflow: hidden;
+    }
+    .intro { padding: clamp(28px, 5vw, 58px); position: relative; }
+    h1 { font-size: clamp(48px, 8vw, 100px); line-height: .88; margin: 0 0 22px; letter-spacing: -.075em; }
+    .amp { color: var(--crab); font-family: Georgia, serif; font-style: italic; letter-spacing: -.04em; }
+    .subtitle { font-size: clamp(18px, 2vw, 24px); line-height: 1.35; max-width: 700px; color: #352c25; margin: 0 0 30px; }
+    .take { display: inline-flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid rgba(208,64,64,.3); background: rgba(208,64,64,.08); border-radius: 999px; font-weight: 760; }
+    .duel { padding: 22px; display: grid; gap: 16px; }
+    .lang-card { border-radius: 24px; padding: 25px; color: white; min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+    .lang-card:after { content: ""; position: absolute; inset: auto -40px -70px auto; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,.14); }
+    .rust { background: linear-gradient(135deg, #4b1b0d, var(--rust)); }
+    .ts { background: linear-gradient(135deg, #14375d, var(--ts)); }
+    .lang-card h2 { margin: 0; font-size: 36px; letter-spacing: -.045em; }
+    .lang-card p { margin: 12px 0 0; opacity: .9; line-height: 1.45; }
+    .score { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+    .pill { padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.18); font-size: 12px; font-weight: 700; }
+    section { margin-top: 26px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .metric { padding: 22px; }
+    .metric b { display: block; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+    .bar { height: 12px; background: rgba(23,20,18,.08); border-radius: 999px; overflow: hidden; display: flex; margin: 10px 0; }
+    .bar span:first-child { background: var(--rust); }
+    .bar span:last-child { background: var(--ts); }
+    .legend { display: flex; justify-content: space-between; font-size: 13px; font-weight: 750; }
+    .legend .r { color: var(--rust); } .legend .t { color: var(--ts); }
+    .matrix { padding: 14px; }
+    table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 22px; }
+    th, td { padding: 18px 16px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-size: 12px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); background: rgba(255,255,255,.38); }
+    td { line-height: 1.45; }
+    tr:last-child td { border-bottom: 0; }
+    .tag { display: inline-block; padding: 5px 9px; border-radius: 999px; font-size: 12px; font-weight: 800; margin-bottom: 6px; }
+    .tag.r { background: rgba(183,65,14,.12); color: var(--rust); }
+    .tag.t { background: rgba(49,120,198,.13); color: var(--ts); }
+    .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .choice { padding: 28px; }
+    .choice h3 { margin: 0 0 14px; font-size: 26px; letter-spacing: -.035em; }
+    ul { margin: 0; padding-left: 20px; color: #3d342d; line-height: 1.65; }
+    .verdict { padding: 34px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 24px; align-items: center; }
+    .verdict .big { font-size: clamp(34px, 5vw, 64px); line-height: .95; letter-spacing: -.06em; margin: 0; }
+    .quote { border-left: 5px solid var(--crab); padding-left: 20px; font-size: 20px; line-height: 1.42; color: #332923; }
+    .footer { text-align: center; color: var(--muted); margin-top: 28px; font-size: 13px; }
+    @media (max-width: 880px) { .hero, .grid, .cards, .verdict { grid-template-columns: 1fr; } h1 { font-size: 58px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav><span>engineering comparison</span><span class="seal">蟹</span><span>rust vs typescript</span></nav>
+
+    <main class="hero">
+      <div class="panel intro">
+        <h1>Rust <span class="amp">vs</span><br/>TypeScript</h1>
+        <p class="subtitle">Two very different weapons: Rust is a forged blade for systems where correctness and performance matter. TypeScript is a fast-moving city toolkit for product surfaces, APIs, and developer velocity.</p>
+        <div class="take">🦀 Klaus take: use Rust for engines, TypeScript for orchestration.</div>
+      </div>
+      <div class="panel duel">
+        <div class="lang-card rust">
+          <div><h2>Rust</h2><p>Memory-safe systems programming without a garbage collector. Brutal learning curve, ridiculous payoff when you need speed and reliability.</p></div>
+          <div class="score"><span class="pill">performance</span><span class="pill">safety</span><span class="pill">concurrency</span><span class="pill">CLI/native</span></div>
+        </div>
+        <div class="lang-card ts">
+          <div><h2>TypeScript</h2><p>JavaScript with guardrails. Excellent ecosystem, shipping speed, web/native glue, and API work. Runtime still inherits JS chaos.</p></div>
+          <div class="score"><span class="pill">velocity</span><span class="pill">web</span><span class="pill">ecosystem</span><span class="pill">teams</span></div>
+        </div>
+      </div>
+    </main>
+
+    <section class="grid">
+      <div class="panel metric"><b>Raw runtime performance</b><div class="bar"><span style="width:88%"></span><span style="width:12%"></span></div><div class="legend"><span class="r">Rust wins</span><span class="t">TS trails</span></div></div>
+      <div class="panel metric"><b>Shipping product fast</b><div class="bar"><span style="width:35%"></span><span style="width:65%"></span></div><div class="legend"><span class="r">Rust</span><span class="t">TypeScript wins</span></div></div>
+      <div class="panel metric"><b>Correctness at scale</b><div class="bar"><span style="width:72%"></span><span style="width:28%"></span></div><div class="legend"><span class="r">Rust wins</span><span class="t">TS helps</span></div></div>
+    </section>
+
+    <section class="panel matrix">
+      <table>
+        <thead><tr><th>Dimension</th><th>Rust</th><th>TypeScript</th><th>Winner</th></tr></thead>
+        <tbody>
+          <tr><td>Performance</td><td>Near C/C++ speed, predictable memory, no GC pauses.</td><td>Fast enough for most backend/web tasks, but V8 + GC ceilings exist.</td><td><span class="tag r">Rust</span></td></tr>
+          <tr><td>Safety</td><td>Borrow checker prevents whole classes of memory/data race bugs at compile time.</td><td>Types catch shape errors, but runtime JS can still surprise you.</td><td><span class="tag r">Rust</span></td></tr>
+          <tr><td>Developer velocity</td><td>Slower upfront; compiler is a strict gym coach.</td><td>Extremely fast iteration, huge package ecosystem, easy hiring.</td><td><span class="tag t">TypeScript</span></td></tr>
+          <tr><td>Ecosystem</td><td>Strong for systems, CLIs, WASM, infra; weaker for SaaS glue.</td><td>Dominates web apps, API integrations, frontend, automation.</td><td><span class="tag t">TypeScript</span></td></tr>
+          <tr><td>Concurrency</td><td>Fearless concurrency model; async is powerful but can feel arcane.</td><td>Event-loop model is simple for I/O; CPU parallelism is awkward.</td><td><span class="tag r">Rust</span></td></tr>
+          <tr><td>Operational complexity</td><td>Single static binaries, low memory, great for edge/infra.</td><td>Node runtime, dependency forests, simpler deployment culture.</td><td><span class="tag r">Rust</span> / <span class="tag t">TS</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="cards">
+      <div class="panel choice">
+        <h3>Choose Rust when…</h3>
+        <ul>
+          <li>You are building a database, proxy, runtime, agent driver, CLI, parser, or high-throughput service.</li>
+          <li>Latency, memory, and reliability are product features.</li>
+          <li>A crash is expensive and “we’ll test it later” is not a strategy.</li>
+          <li>You want small deployable binaries and fewer production footguns.</li>
+        </ul>
+      </div>
+      <div class="panel choice">
+        <h3>Choose TypeScript when…</h3>
+        <ul>
+          <li>You are building web apps, dashboards, API glue, workflows, or integrations.</li>
+          <li>Iteration speed matters more than squeezing every CPU cycle.</li>
+          <li>You need to hire easily and share code across frontend/backend.</li>
+          <li>The ecosystem already has the SDKs you need yesterday.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel verdict">
+      <h2 class="big">The sane stack is both.</h2>
+      <div class="quote">Put Rust in the hot path and TypeScript in the human path. Rust should power the engine room; TypeScript should wire the product, UX, automations, and integrations. Don’t make either language do cosplay.</div>
+    </section>
+
+    <div class="footer">built for Saad · here.now artifact · crab red seal intact</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Less Is More — Saad Farooq</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root { --bg:#faf9f6;--text:#1a1a1a;--muted:#666;--accent:#c0392b;--border:#e0ddd8;--code-bg:#f0ede8;--max-width:720px; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;font-size:19px;line-height:1.75;padding:0 1.5rem}
+  .paper{max-width:var(--max-width);margin:0 auto;padding:4rem 0 6rem}
+  .header{border-bottom:2px solid var(--text);padding-bottom:2rem;margin-bottom:2.5rem}
+  .venue{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem}
+  h1{font-size:2.1rem;font-weight:600;line-height:1.25;margin-bottom:.5rem}
+  .subtitle{font-size:1.1rem;font-style:italic;color:var(--muted);margin-bottom:1.5rem}
+  .meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);display:flex;gap:2rem;flex-wrap:wrap}
+  .meta a{color:var(--accent);text-decoration:none}
+  .abstract{background:var(--code-bg);border-left:3px solid var(--accent);padding:1.5rem 1.8rem;margin-bottom:3rem;border-radius:0 4px 4px 0}
+  .abstract-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem}
+  .abstract p{font-size:.95rem;color:#333;line-height:1.7}
+  h2{font-size:1.3rem;font-weight:600;margin-top:3rem;margin-bottom:.8rem;padding-bottom:.3rem;border-bottom:1px solid var(--border)}
+  h3{font-size:1.05rem;font-weight:600;margin-top:1.8rem;margin-bottom:.5rem;color:#333}
+  p{margin-bottom:1.1rem}
+  .section-num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:.5rem}
+  .callout{background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:1.2rem 1.5rem;margin:1.5rem 0}
+  .callout-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+  .callout ul{padding-left:1.2rem;font-size:.95rem}
+  .callout ul li{margin-bottom:.3rem}
+  code{font-family:'JetBrains Mono',monospace;font-size:.8em;background:var(--code-bg);border:1px solid var(--border);padding:.1em .4em;border-radius:3px}
+  .code-block{font-family:'JetBrains Mono',monospace;font-size:.85rem;background:#1a1a1a;color:#e8e8e8;padding:1.2rem 1.5rem;border-radius:6px;margin:1.5rem 0;overflow-x:auto}
+  .comparison{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.9rem}
+  .comparison th{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--code-bg);padding:.7rem 1rem;text-align:left;border:1px solid var(--border)}
+  .comparison td{padding:.6rem 1rem;border:1px solid var(--border);vertical-align:top}
+  .comparison tr:nth-child(even) td{background:#f5f3ef}
+  .tag-win{color:#27ae60;font-weight:600}
+  .tag-lose{color:var(--accent);font-weight:600}
+  .tag-neutral{color:var(--muted)}
+  .pull-quote{border-top:2px solid var(--text);border-bottom:2px solid var(--text);margin:2.5rem 0;padding:1.5rem 0;font-size:1.4rem;font-style:italic;line-height:1.4;text-align:center;color:#222}
+  .references{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border)}
+  .ref-list{font-size:.85rem;color:var(--muted);line-height:1.6}
+  .ref-list li{margin-bottom:.5rem;list-style:none;padding-left:2.5rem;text-indent:-2.5rem}
+  .ref-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);margin-right:.5rem}
+  .footer{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+  .toc{background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:1.2rem 1.5rem;margin-bottom:3rem;font-size:.9rem}
+  .toc-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem}
+  .toc ol{padding-left:1.2rem;color:var(--muted)}
+  .toc ol li{margin-bottom:.2rem}
+  .toc a{color:var(--text);text-decoration:none}
+  .toc a:hover{color:var(--accent)}
+  @media(max-width:600px){body{font-size:17px}h1{font-size:1.6rem}.pull-quote{font-size:1.2rem}.meta{gap:1rem}}
+</style>
+</head>
+<body>
+<article class="paper">
+  <div class="header">
+    <div class="venue">Preprint · March 2026</div>
+    <h1>Less Is More: How Minimal Agent Design Outperforms Feature-Rich Coding Assistants</h1>
+    <div class="subtitle">A Case Study of Pi Against Heavily Prompted Agents</div>
+    <div class="meta">
+      <span>Saad Farooq</span>
+      <a href="mailto:saad@data-grid.ai">saad@data-grid.ai</a>
+      <span>March 2026</span>
+    </div>
+  </div>
+
+  <div class="abstract">
+    <div class="abstract-label">Abstract</div>
+    <p>The proliferation of AI coding agents—Claude Code, Codex CLI, Cursor, Windsurf—has introduced a paradox: tools designed to accelerate development increasingly demand that developers invest time configuring, learning, and re-learning the tools themselves. This paper argues that Pi (pi.dev), a deliberately minimal coding agent, achieves higher net productivity by eliminating the configuration tax, workflow churn, and cognitive overhead imposed by feature-rich alternatives. We analyze three sources of friction in heavily prompted agents—<em>setup complexity</em>, <em>workflow instability</em>, and <em>prompt-system opacity</em>—and contrast them with Pi's design philosophy of radical simplicity. We conclude that for a significant class of coding tasks, the agent that does less enables the developer to accomplish more.</p>
+  </div>
+
+  <div class="toc">
+    <div class="toc-label">Contents</div>
+    <ol>
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#config-tax">The Configuration Tax</a></li>
+      <li><a href="#workflow">Workflow Instability</a></li>
+      <li><a href="#opacity">Prompt-System Opacity</a></li>
+      <li><a href="#pi">The Pi Alternative: Radical Minimalism</a></li>
+      <li><a href="#discussion">Discussion</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+      <li><a href="#references">References</a></li>
+    </ol>
+  </div>
+
+  <h2 id="intro"><span class="section-num">1.</span> Introduction</h2>
+  <p>The year 2025 marked a turning point in software development tooling. AI coding agents moved from novelty to necessity, with tools like Claude Code [1], OpenAI's Codex CLI [10], Cursor [2], and Windsurf [4] each promising to transform how software is written. These agents ship with extensive system prompts, configurable skill libraries, permission systems, hook mechanisms, MCP server integrations, and opinionated workflows—all in service of making the AI "do the right thing" out of the box.</p>
+  <p>The implicit assumption is that more capability equals more productivity. This paper challenges that assumption.</p>
+  <p>Drawing on cognitive load theory [12], established principles of usability [9], and the lived experience of developers navigating these tools, we argue that the overhead of learning, configuring, and maintaining a heavily prompted agent often exceeds the productivity it provides. The developer's attention—the scarcest resource in software engineering [3]—is redirected from the problem domain to the tool domain.</p>
+  <p>Pi [11] takes the opposite approach. It ships as a minimal agent harness: no opinionated system prompts, no built-in skill packs, no elaborate permission dialogs. The developer brings their own context. The agent stays out of the way.</p>
+
+  <h2 id="config-tax"><span class="section-num">2.</span> The Configuration Tax</h2>
+  <p>Before a developer writes a single line of code with a modern AI agent, they face a gauntlet of setup decisions. We define the <em>configuration tax</em> as the cumulative time spent installing, configuring, customizing, and debugging the agent toolchain before productive work begins.</p>
+
+  <h3>2.1 Anatomy of the Tax</h3>
+  <p>Consider a typical Claude Code onboarding flow:</p>
+  <div class="callout">
+    <div class="callout-label">Claude Code Onboarding — 8 Steps Before Writing Code</div>
+    <ul>
+      <li>Install the CLI and authenticate via API key or OAuth</li>
+      <li>Understand the permission model (ask, auto-edit, YOLO mode) and choose a default</li>
+      <li>Discover and configure CLAUDE.md files at project and user levels</li>
+      <li>Learn the slash command system—built-in, user, and skill-based commands</li>
+      <li>Optionally install MCP servers for GitHub, Linear, Slack, or other integrations</li>
+      <li>Configure hooks for pre/post-tool-call automation</li>
+      <li>Set up memory files so the agent "remembers" preferences across sessions</li>
+      <li>Install skill packs if working in a specialized domain</li>
+    </ul>
+  </div>
+  <p>Each step is individually reasonable. Collectively, they constitute a learning curve that rivals the complexity of the IDE itself [7]. And this is <em>per tool</em>—a developer evaluating Claude Code, Codex, and Cursor must repeat a comparable process for each.</p>
+
+  <h3>2.2 The Hidden Cost: Decision Fatigue</h3>
+  <p>The configuration tax is not merely a time cost; it is a cognitive cost. Every configuration option presents a decision: Should I use auto-edit mode? Should I enable the GitHub MCP? Should I write project-specific CLAUDE.md or use global settings?</p>
+  <p>Research on decision fatigue [12] shows that the quality of decisions degrades as their quantity increases. A developer who has spent 30 minutes configuring their agent arrives at the actual coding task with diminished cognitive capacity.</p>
+
+  <h3>2.3 Pi's Zero-Configuration Entry</h3>
+  <p>Pi eliminates this tax by design. There is no configuration file to author, no permission mode to choose, no skill library to install. The entire "onboarding" is:</p>
+  <div class="code-block">pi</div>
+  <p>This is not a limitation—it is a design choice rooted in the Unix philosophy [5]: do one thing, do it well, and compose with other tools when needed. The developer's existing shell, editor, and version control system are the configuration.</p>
+
+  <h2 id="workflow"><span class="section-num">3.</span> Workflow Instability</h2>
+  <p>Feature-rich agents evolve rapidly. Claude Code has shipped breaking changes to its permission model, slash command syntax, memory system, and MCP protocol across multiple releases in its first year. Codex CLI introduced and deprecated tool-calling conventions within months. Cursor's agent mode, tab completion, and composer features have been reorganized repeatedly.</p>
+  <p>We define <em>workflow instability</em> as the frequency with which a developer must re-learn or re-adapt their established patterns due to upstream changes in the agent toolchain.</p>
+
+  <h3>3.1 The Update Treadmill</h3>
+  <div class="callout">
+    <div class="callout-label">What breaks on every update</div>
+    <ul>
+      <li>Custom CLAUDE.md instructions that relied on deprecated behavior</li>
+      <li>Slash commands whose syntax or resolution order changed</li>
+      <li>Hook scripts that assumed specific tool-call event shapes</li>
+      <li>MCP server configurations broken by protocol version bumps</li>
+      <li>Mental models of how the agent interprets ambiguous instructions</li>
+    </ul>
+  </div>
+
+  <h3>3.2 Compound Instability Across Tools</h3>
+  <p>Developers who use multiple AI tools face compound instability. A Cursor update may ship the same week as a Claude Code release and a new MCP specification. Each demands attention. The combined maintenance burden can approach that of a small dependency in the project itself.</p>
+
+  <h3>3.3 Stability Through Simplicity</h3>
+  <p>Pi's minimalism provides inherent stability. With fewer features, there are fewer features to change. A workflow that works with Pi today will work with Pi next month, because the workflow lives in the developer's head and habits, not in a configuration file managed by the tool vendor.</p>
+
+  <h2 id="opacity"><span class="section-num">4.</span> Prompt-System Opacity</h2>
+  <p>Modern coding agents ship with system prompts that can exceed 10,000 tokens. We define <em>prompt-system opacity</em> as the degree to which the agent's behavior is shaped by instructions invisible to the user.</p>
+
+  <h3>4.1 The Predictability Problem</h3>
+  <p>When a developer asks Claude Code to "refactor this function," the agent's response is influenced by:</p>
+  <table class="comparison">
+    <thead><tr><th>Layer</th><th>Source</th><th>Visibility</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>The user's message</td><td><span class="tag-win">Full</span></td></tr>
+      <tr><td>2</td><td>System prompt (10k+ tokens of behavioral instructions)</td><td><span class="tag-lose">None</span></td></tr>
+      <tr><td>3</td><td>CLAUDE.md files in project/user directory</td><td><span class="tag-neutral">Partial</span></td></tr>
+      <tr><td>4</td><td>Active skill definitions from .claude/skills/</td><td><span class="tag-neutral">Partial</span></td></tr>
+      <tr><td>5</td><td>Memory files from prior sessions</td><td><span class="tag-neutral">Partial</span></td></tr>
+      <tr><td>6</td><td>Current tool permission mode</td><td><span class="tag-neutral">Partial</span></td></tr>
+    </tbody>
+  </table>
+  <p>The developer controls layer (1) directly. Layer (2) is entirely hidden. This creates a predictability gap: the agent may refuse, reformat, or take a conservative approach for reasons the developer cannot inspect.</p>
+
+  <h3>4.2 Debugging the Agent</h3>
+  <p>When the agent behaves unexpectedly, the developer must reason about a multi-layered prompt stack. Is the unwanted behavior caused by the system prompt? A conflicting CLAUDE.md directive? A skill loaded implicitly? A memory from three sessions ago? This represents a violation of Nielsen's usability heuristic of visibility of system status [8].</p>
+
+  <h3>4.3 Transparency Through Absence</h3>
+  <p>Pi resolves this by having no system prompt to be opaque about. The developer's input is the entire context. If the agent behaves unexpectedly, the cause is in the conversation—fully visible, fully inspectable. Developers build accurate mental models faster, producing more effective prompts [6] and creating a virtuous cycle of productivity.</p>
+
+  <div class="pull-quote">"The best agent might be the one you forget is there."</div>
+
+  <h2 id="pi"><span class="section-num">5.</span> The Pi Alternative: Radical Minimalism</h2>
+
+  <h3>5.1 The Developer Is the Configuration</h3>
+  <p>Pi ships no <code>.pirc</code>, no project-level instruction files, no skill libraries. The developer's prompt, their file system, and their existing tools are the configuration. This echoes a long tradition in Unix tool design: <code>grep</code> does not ship with a configuration file. Its power comes from composition, not configuration.</p>
+
+  <h3>5.2 Stability Over Features</h3>
+  <p>By maintaining a minimal feature surface, Pi avoids the workflow instability that plagues feature-rich agents. Capability is emergent from the combination of Pi and the developer's existing environment, rather than built into the agent itself.</p>
+
+  <h3>5.3 Full Transparency</h3>
+  <p>Every instruction that shapes Pi's behavior is visible in the conversation. There is no hidden system prompt, no implicit memory, no loaded skills modifying behavior behind the scenes. The developer can predict, inspect, and reproduce the agent's behavior with certainty.</p>
+
+  <h3>5.4 What Pi Does Not Do</h3>
+  <div class="callout">
+    <div class="callout-label">Acknowledged Trade-offs</div>
+    <ul>
+      <li>No built-in guardrails for destructive operations</li>
+      <li>No automatic context loading from project files</li>
+      <li>No integration marketplace (MCP servers, plugins)</li>
+      <li>No persistent memory across sessions</li>
+    </ul>
+  </div>
+  <p>These are genuine trade-offs. The argument of this paper is not that Pi is universally superior, but that for experienced developers on focused tasks, the net productivity gain of minimalism exceeds the gross capability of feature-rich agents minus their overhead.</p>
+
+  <h2 id="discussion"><span class="section-num">6.</span> Discussion</h2>
+
+  <h3>6.1 When Does Minimalism Win?</h3>
+  <table class="comparison">
+    <thead><tr><th>Context</th><th>Better Fit</th></tr></thead>
+    <tbody>
+      <tr><td>Strong domain knowledge, well-defined task</td><td><span class="tag-win">Pi</span></td></tr>
+      <tr><td>Multiple projects with different conventions</td><td><span class="tag-win">Pi</span></td></tr>
+      <tr><td>Speed of iteration over guardrails</td><td><span class="tag-win">Pi</span></td></tr>
+      <tr><td>Team-enforced safety constraints</td><td><span class="tag-lose">Feature-rich</span></td></tr>
+      <tr><td>New developer, unfamiliar domain</td><td><span class="tag-lose">Feature-rich</span></td></tr>
+      <tr><td>Long-running multi-step orchestration</td><td><span class="tag-lose">Feature-rich</span></td></tr>
+      <tr><td>Org workflows requiring external integrations</td><td><span class="tag-lose">Feature-rich</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>6.2 The Middle Path</h3>
+  <p>An interesting design question emerges: can an agent be minimal by default but extensible on demand? The key insight is that extensibility should be <em>user-driven and visible</em>, not vendor-driven and hidden. Claude Code's CLAUDE.md system gestures in this direction but remains coupled to the agent's internal prompt architecture.</p>
+
+  <h3>6.3 Threats to Validity</h3>
+  <p>This paper presents a qualitative argument rather than a controlled experiment. A rigorous empirical study—measuring configuration time, task completion time, and error rates across agents—would strengthen or refute these arguments. We encourage the research community to pursue such studies.</p>
+
+  <h2 id="conclusion"><span class="section-num">7.</span> Conclusion</h2>
+  <p>The AI coding agent landscape has converged on maximalism: more features, more configuration, more integration, more prompting. This paper has argued that this convergence carries real costs—a configuration tax that drains cognitive resources, workflow instability that demands ongoing maintenance, and prompt-system opacity that undermines developer trust.</p>
+  <p>Pi represents a counterpoint. By doing less, it asks less of the developer. By changing less, it wastes less of their time on re-adaptation. By hiding less, it builds trust faster.</p>
+  <p>The productivity of a tool is not measured by its feature count. It is measured by the delta between the value it provides and the overhead it imposes. For experienced developers on focused tasks, a minimal agent that stays out of the way will often deliver a larger delta than a feature-rich agent that demands attention.</p>
+  <p>As Brooks observed four decades ago: "The complexity of software is an essential property, not an accidental one" [3]. Our tools should reduce that complexity, not add to it. The best agent might be the one you forget is there.</p>
+
+  <div class="references" id="references">
+    <h2>References</h2>
+    <ul class="ref-list">
+      <li><span class="ref-num">[1]</span> Anthropic. Claude code: Anthropic's CLI for Claude. https://claude.ai/claude-code, 2025.</li>
+      <li><span class="ref-num">[2]</span> Anysphere Inc. Cursor: The AI code editor. https://cursor.com, 2025.</li>
+      <li><span class="ref-num">[3]</span> Frederick P. Brooks. No silver bullet. <em>Computer</em>, 20(4):10–19, 1987.</li>
+      <li><span class="ref-num">[4]</span> Codeium. Windsurf: AI-native IDE. https://windsurf.com, 2025.</li>
+      <li><span class="ref-num">[5]</span> Edsger W. Dijkstra. The humble programmer. <em>CACM</em>, 15(10):859–866, 1972.</li>
+      <li><span class="ref-num">[6]</span> Andrew J. Ko et al. Six learning barriers in end-user programming systems. <em>IEEE VL/HCC</em>, 2004.</li>
+      <li><span class="ref-num">[7]</span> Gail C. Murphy et al. How are Java developers using Eclipse? <em>IEEE Software</em>, 23(4):76–83, 2006.</li>
+      <li><span class="ref-num">[8]</span> Jakob Nielsen. <em>Usability Engineering</em>. Interactive Technologies, 1994.</li>
+      <li><span class="ref-num">[9]</span> Don Norman. <em>The Design of Everyday Things</em>. Basic Books, 2013.</li>
+      <li><span class="ref-num">[10]</span> OpenAI. Codex CLI. https://github.com/openai/codex, 2025.</li>
+      <li><span class="ref-num">[11]</span> Pi Team. Pi: The minimal coding agent. https://pi.dev, 2025.</li>
+      <li><span class="ref-num">[12]</span> John Sweller et al. <em>Cognitive Load Theory</em>. Springer, 2011.</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <span>Saad Farooq · saad@data-grid.ai</span>
+    <span>March 2026 · Preprint</span>
+  </div>
+</article>
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataGrid — BITS: AI-Native Revenue Operations</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#F5F5F0;--ink:#0A0A0A;--mid:#6B6B6B;--light:#D4D4D0}
+html,body{overflow:hidden;width:100vw;height:100vh;background:var(--ink);font-family:'Source Serif 4',Georgia,serif}
+.magazine{display:flex;width:1400vw;height:100vh;transition:transform .6s cubic-bezier(.25,.1,.25,1)}
+.page{width:100vw;height:100vh;flex-shrink:0;overflow:hidden;position:relative;padding:6vh 5vw 10vh}
+.dark{background:var(--ink);color:var(--paper)}
+.light{background:var(--paper);color:var(--ink)}
+.fd{font-family:'Playfair Display',serif}
+.fm{font-family:'IBM Plex Mono',monospace}
+.fb{font-family:'Source Serif 4',Georgia,serif}
+
+/* Slide layout */
+.sl{display:grid;grid-template-columns:55fr 45fr;height:100%;gap:4vw;align-items:start;padding-top:2vh}
+.s-l,.s-r{display:flex;flex-direction:column;justify-content:flex-start;height:100%}
+
+/* Ghost rank */
+.gr{font-family:'Playfair Display',serif;font-size:max(80px,12vw);font-weight:900;line-height:1;opacity:.06;position:absolute;top:2vh;left:3vw}
+.dark .gr{opacity:.08}
+
+/* Category tag */
+.ct{font-family:'IBM Plex Mono',monospace;font-size:max(11px,.85vw);letter-spacing:.25em;text-transform:uppercase;padding:6px 14px;border:1px solid;display:inline-block;margin-bottom:2.5vh}
+.dark .ct{border-color:rgba(245,245,240,.3);color:rgba(245,245,240,.8)}
+.light .ct{border-color:rgba(10,10,10,.3);color:rgba(10,10,10,.7)}
+
+/* Headline */
+.sh{font-family:'Playfair Display',serif;font-size:max(28px,5vw);font-weight:900;line-height:1.05;margin-bottom:2.5vh}
+
+/* Subline */
+.sub{font-family:'IBM Plex Mono',monospace;font-size:max(12px,.95vw);letter-spacing:.1em;opacity:.5;margin-bottom:2.5vh}
+
+/* Body */
+.sd{font-family:'Source Serif 4',serif;font-size:max(17px,1.5vw);line-height:1.6;max-width:42vw}
+.dark .sd{opacity:.85}
+.light .sd{opacity:.9}
+
+/* Metric */
+.mc{font-family:'Playfair Display',serif;font-size:max(42px,6.5vw);font-weight:900;line-height:1;margin-bottom:.5vh}
+.ml{font-family:'IBM Plex Mono',monospace;font-size:max(10px,.75vw);letter-spacing:.3em;text-transform:uppercase;opacity:.5;margin-bottom:3vh}
+
+/* Phase tag */
+.pt{font-family:'IBM Plex Mono',monospace;font-size:max(11px,.85vw);letter-spacing:.2em;text-transform:uppercase;padding:5px 12px;border:1px solid;display:inline-block;margin-bottom:3vh}
+.dark .pt{border-color:rgba(245,245,240,.25);color:rgba(245,245,240,.65)}
+.light .pt{border-color:rgba(10,10,10,.25);color:rgba(10,10,10,.6)}
+
+/* Callout */
+.cb{padding:2.5vh 2vw;margin-top:auto}
+.dark .cb{background:rgba(245,245,240,.06);border-left:4px solid rgba(245,245,240,.3)}
+.light .cb{background:rgba(10,10,10,.04);border-left:4px solid rgba(10,10,10,.2)}
+.cl{font-family:'IBM Plex Mono',monospace;font-size:max(10px,.7vw);letter-spacing:.3em;text-transform:uppercase;margin-bottom:1.2vh;font-weight:600}
+.dark .cl{opacity:.6}
+.light .cl{opacity:.5}
+.cx{font-family:'Source Serif 4',serif;font-size:max(15px,1.2vw);line-height:1.55}
+.dark .cx{opacity:.8}
+.light .cx{opacity:.85}
+
+/* Navigation */
+.nav-dots{position:fixed;bottom:3vh;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:100}
+.nav-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid rgba(200,200,200,.5);background:transparent;cursor:pointer;transition:all .3s}
+.nav-dot.active{background:rgba(200,200,200,.9);transform:scale(1.3)}
+.nav-arrows{position:fixed;bottom:3vh;z-index:100;font-family:'IBM Plex Mono',monospace;font-size:max(12px,.9vw);letter-spacing:.15em;opacity:.4;cursor:pointer;transition:opacity .2s;user-select:none}
+.nav-arrows:hover{opacity:.8}
+.nav-left{left:3vw}.nav-right{right:3vw}
+.page-counter{position:fixed;top:3vh;right:5vw;font-family:'IBM Plex Mono',monospace;font-size:max(10px,.75vw);letter-spacing:.2em;color:rgba(200,200,200,.4);z-index:100}
+
+/* Cover helpers */
+.cv-m{font-family:'IBM Plex Mono',monospace;font-size:max(12px,1vw);letter-spacing:.3em;text-transform:uppercase;opacity:.6}
+.cv-t{font-family:'Playfair Display',serif;font-size:max(48px,6.5vw);font-weight:900;line-height:.95;margin:3vh 0 2vh}
+.cv-s{font-family:'Source Serif 4',serif;font-size:max(18px,1.8vw);font-style:italic;opacity:.75;max-width:55vw;line-height:1.4}
+.cv-d{font-family:'IBM Plex Mono',monospace;font-size:max(11px,.85vw);letter-spacing:.15em;opacity:.5;margin-top:4vh}
+.cv-r{width:8vw;height:3px;background:var(--paper);margin:2vh 0;opacity:.4}
+</style>
+</head>
+<body>
+
+<div class="magazine" id="magazine">
+
+<!-- PAGE 1: COVER -->
+<div class="page dark">
+<div class="cv-m">AI-NATIVE REVENUE OPERATIONS</div>
+<div class="cv-r"></div>
+<div class="cv-t">BITS</div>
+<div class="cv-s">Business Intelligence. Tooling. Strategy.<br>The complete GTM engineering framework for companies that refuse to fall behind.</div>
+<div class="cv-d">ISSUE 001 · APRIL 2026 · DATA-GRID.AI</div>
+<div style="position:absolute;bottom:10vh;right:5vw;text-align:right">
+<div class="cv-r" style="margin-left:auto"></div>
+<div class="fm" style="font-size:max(14px,1.2vw);letter-spacing:.2em;opacity:.7">DATA-GRID.AI</div>
+<div class="fm" style="font-size:max(10px,.8vw);letter-spacing:.15em;opacity:.35;margin-top:1vh">FROM THE TEAM BEHIND PHI.CONSULTING</div>
+</div>
+</div>
+
+<!-- PAGE 2: THE PROBLEM (Light) -->
+<div class="page light">
+<div class="gr">00</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">THE PROBLEM</div>
+<div class="sh">Your Revenue Engine Is Running on Duct Tape</div>
+<div class="sd">You have 14 subscriptions. Three of them do the same thing. Nobody knows which data is real. Your SDRs are manually enriching leads. Your CRM is a graveyard of stale contacts. And the "AI strategy" your last consultant sold you is collecting dust in a Google Doc.</div>
+<div class="sd" style="margin-top:2vh">This isn't a technology problem. It's an execution problem. And it's costing you pipeline every single day.</div>
+</div>
+<div class="s-r">
+<div class="mc">42%</div>
+<div class="ml">of businesses abandoned AI initiatives in 2024</div>
+<div class="mc" style="margin-top:3vh">$800+</div>
+<div class="ml">per month on CRM tools most teams use at 30% capacity</div>
+<div class="cb">
+<div class="cl">The Gap</div>
+<div class="cx">Big consultancies won't touch companies under 500 employees. Dev shops build whatever you ask for — even if it's the wrong thing. DIY tools look good until compliance, integration, and scaling show up. DataGrid exists to close that gap.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 3: BITS FRAMEWORK (Dark) -->
+<div class="page dark">
+<div class="gr">BI</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">THE FRAMEWORK</div>
+<div class="sh">BITS Across the Entire GTM Lifecycle</div>
+<div class="sd">DataGrid delivers three interconnected capabilities — not as a menu, but as an integrated system. Each one compounds the others. Skip one, the whole engine underperforms.</div>
+<div class="sd" style="margin-top:2vh;font-style:italic;opacity:.7">Business Intelligence → Tooling → Strategy.<br>Data feeds tools. Tools execute strategy. Strategy defines what data matters.</div>
+</div>
+<div class="s-r">
+<div style="margin-top:2vh">
+<div class="fm" style="font-size:max(13px,1.1vw);letter-spacing:.15em;opacity:.6;margin-bottom:2vh">THE LOOP</div>
+<div style="padding:2vh 0;border-top:1px solid rgba(245,245,240,.15)">
+<div class="fd" style="font-size:max(22px,2.5vw);font-weight:900">BI</div>
+<div class="fb" style="font-size:max(15px,1.2vw);opacity:.7;margin-top:.8vh">Business Intelligence</div>
+<div class="fm" style="font-size:max(11px,.85vw);opacity:.45;margin-top:.5vh">Data · Enrichment · Predictive Analytics</div>
+</div>
+<div style="padding:2vh 0;border-top:1px solid rgba(245,245,240,.15)">
+<div class="fd" style="font-size:max(22px,2.5vw);font-weight:900">T</div>
+<div class="fb" style="font-size:max(15px,1.2vw);opacity:.7;margin-top:.8vh">Tooling</div>
+<div class="fm" style="font-size:max(11px,.85vw);opacity:.45;margin-top:.5vh">Stack Architecture · Management · Scale</div>
+</div>
+<div style="padding:2vh 0;border-top:1px solid rgba(245,245,240,.15);border-bottom:1px solid rgba(245,245,240,.15)">
+<div class="fd" style="font-size:max(22px,2.5vw);font-weight:900">S</div>
+<div class="fb" style="font-size:max(15px,1.2vw);opacity:.7;margin-top:.8vh">Strategy</div>
+<div class="fm" style="font-size:max(11px,.85vw);opacity:.45;margin-top:.5vh">GTM · Revenue Ops · Go-to-Market Architecture</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 4: BI — Lead Enrichment (Light) -->
+<div class="page light">
+<div class="gr">01</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">BUSINESS INTELLIGENCE</div>
+<div class="sh">Know Your Buyer Before They Know You</div>
+<div class="sub">LEAD ENRICHMENT & DATA INFRASTRUCTURE</div>
+<div class="sd">Raw leads are worthless. Enriched leads close deals. We build automated pipelines that take a name and email and return company size, tech stack, funding stage, hiring signals, intent data, and ICP fit score — before your SDR picks up the phone.</div>
+</div>
+<div class="s-r">
+<div class="mc">97%</div>
+<div class="ml">CAC Reduction · Datatruck Case Study</div>
+<div class="pt">GTM LIFECYCLE: TOP OF FUNNEL</div>
+<div class="cb">
+<div class="cl">What We Actually Do</div>
+<div class="cx">We wire enrichment APIs (Clearbit, Apollo, custom scrapers) into your CRM so every inbound lead is automatically scored and routed. No manual research. No guessing. Your reps only talk to leads that fit — and they walk into every call armed with context.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 5: BI — Predictive Analytics (Dark) -->
+<div class="page dark">
+<div class="gr">02</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">BUSINESS INTELLIGENCE</div>
+<div class="sh">Stop Guessing. Start Predicting.</div>
+<div class="sub">PREDICTIVE ANALYTICS & REVENUE FORECASTING</div>
+<div class="sd">Your pipeline isn't a spreadsheet — it's a signal. We build models that tell you which deals will close, which accounts are at risk, and where your next quarter's revenue is actually coming from. Not vibes. Math.</div>
+</div>
+<div class="s-r">
+<div class="mc">3.4×</div>
+<div class="ml">Average ROI Across 40+ Clients</div>
+<div class="pt">GTM LIFECYCLE: PIPELINE TO CLOSE</div>
+<div class="cb">
+<div class="cl">What We Actually Do</div>
+<div class="cx">Attribution modeling. Pipeline velocity tracking. Win/loss analysis powered by AI. We instrument your CRM so leadership sees real-time revenue health — not a dashboard that lies. Revenue teams run on data, not gut feel.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 6: TOOLING — Stack Architecture (Light) -->
+<div class="page light">
+<div class="gr">03</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">TOOLING</div>
+<div class="sh">1,000 AI Tools Launched This Month. You Need Five.</div>
+<div class="sub">STACK ARCHITECTURE & SELECTION</div>
+<div class="sd">There are 1,000+ AI tools and SaaS subscriptions in market, with hundreds added every week. Most companies either buy too many, buy the wrong ones, or buy the right ones and configure them wrong. We audit your workflow, identify gaps, and build a stack that's right-sized for your stage.</div>
+</div>
+<div class="s-r">
+<div class="mc">5–8</div>
+<div class="ml">Tools in a Properly Architected Stack</div>
+<div class="pt">GTM LIFECYCLE: INFRASTRUCTURE</div>
+<div class="cb">
+<div class="cl">What We Actually Do</div>
+<div class="cx">We evaluate, select, and integrate the exact tools you need — CRM, enrichment, outreach, analytics, automation. Not what's trending. What works at your scale, with your team, in your industry. Then we manage them so you don't need a full-time RevOps hire.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 7: TOOLING — Managed Operations (Dark) -->
+<div class="page dark">
+<div class="gr">04</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">TOOLING</div>
+<div class="sh">We Don't Just Set Up Your Stack. We Run It.</div>
+<div class="sub">MANAGED TOOL OPERATIONS & AI AUTOMATION</div>
+<div class="sd">Setup is 10% of the work. The other 90% is keeping it running — updating workflows when your process changes, troubleshooting integrations, training new hires, optimizing sequences. We handle all of it. Your tools scale with you because we're scaling them.</div>
+</div>
+<div class="s-r">
+<div class="mc">90%</div>
+<div class="ml">of Tool ROI is Lost in Poor Operations</div>
+<div class="pt">GTM LIFECYCLE: ONGOING OPS</div>
+<div class="cb">
+<div class="cl">What We Actually Do</div>
+<div class="cx">AI automation engineering — LLMs, APIs, and workflow tools wired into fully automated pipelines. Lead enrichment at scale, personalized outreach, meeting scheduling, CRM hygiene. We build the automation layer that compounds your revenue without adding headcount.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 8: STRATEGY — GTM Architecture (Light) -->
+<div class="page light">
+<div class="gr">05</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">STRATEGY</div>
+<div class="sh">Techies Who Think Like Consultants</div>
+<div class="sub">GTM & REVENUE STRATEGY</div>
+<div class="sd">We come from Phi Consulting — the team that took TruckX from $2M to $16M ARR, dropped Datatruck's CAC by 97%, and booked 93 meetings for Payoneer in four months. We bring that same consulting rigor to your GTM, but with an AI-native execution layer underneath.</div>
+</div>
+<div class="s-r">
+<div class="mc">$437M</div>
+<div class="ml">Revenue Generated Across Portfolio</div>
+<div class="pt">GTM LIFECYCLE: FULL CYCLE</div>
+<div class="cb">
+<div class="cl">What We Actually Do</div>
+<div class="cx">Two weeks inside your data, your calls, your market. Then a blueprint: ICP definition, channel strategy, hiring plan, tool stack, process design, 90-day scorecard. Not a 60-page deck. A system that runs. We don't leave before it's working.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: STRATEGY — Revenue Operations (Dark) -->
+<div class="page dark">
+<div class="gr">06</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">STRATEGY</div>
+<div class="sh">Revenue Operations Is Not a Dashboard. It's a System.</div>
+<div class="sub">AI-NATIVE REVOPS ARCHITECTURE</div>
+<div class="sd">RevOps isn't CRM administration. It's the operating system of your revenue engine — how leads flow, how deals progress, how teams are measured, how forecasts are built. We design the system, then automate it with AI so it compounds without adding headcount.</div>
+</div>
+<div class="s-r">
+<div class="mc">150%</div>
+<div class="ml">Conversion Increase · Mudflap Case Study</div>
+<div class="pt">GTM LIFECYCLE: SYSTEM DESIGN</div>
+<div class="cb">
+<div class="cl">What We Actually Do</div>
+<div class="cx">CRM architecture. Lead routing. Process design. Rep scorecards. Pipeline hygiene. Attribution. And then the AI layer: automated lead scoring, intelligent routing, predictive forecasting, and self-healing data pipelines. The system gets smarter the longer it runs.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 10: HOW WE WORK (Light) -->
+<div class="page light">
+<div class="gr">07</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">HOW WE WORK</div>
+<div class="sh">Signal. Blueprint. Build. Compound.</div>
+<div class="sub">THE DATAGRID ENGAGEMENT MODEL</div>
+<div class="sd">We don't sell retainers and disappear. Every engagement follows a proven four-phase system that moves from discovery to operating reality in 90 days or less.</div>
+</div>
+<div class="s-r">
+<div style="margin-top:1vh">
+<div style="padding:2.5vh 0;border-bottom:1px solid rgba(10,10,10,.12)">
+<div class="fm" style="font-size:max(11px,.85vw);letter-spacing:.2em;opacity:.4">WEEK 1–2</div>
+<div class="fd" style="font-size:max(20px,2.2vw);font-weight:900;margin-top:.5vh">Signal</div>
+<div class="fb" style="font-size:max(14px,1.1vw);opacity:.7;margin-top:.5vh">Inside your data, your calls, your market. We identify what's broken and what's already working.</div>
+</div>
+<div style="padding:2.5vh 0;border-bottom:1px solid rgba(10,10,10,.12)">
+<div class="fm" style="font-size:max(11px,.85vw);letter-spacing:.2em;opacity:.4">WEEK 3–4</div>
+<div class="fd" style="font-size:max(20px,2.2vw);font-weight:900;margin-top:.5vh">Blueprint</div>
+<div class="fb" style="font-size:max(14px,1.1vw);opacity:.7;margin-top:.5vh">Tool stack. Process design. Hiring plan. 90-day scorecard. Not a strategy deck — a system spec.</div>
+</div>
+<div style="padding:2.5vh 0;border-bottom:1px solid rgba(10,10,10,.12)">
+<div class="fm" style="font-size:max(11px,.85vw);letter-spacing:.2em;opacity:.4">MONTH 2–3</div>
+<div class="fd" style="font-size:max(20px,2.2vw);font-weight:900;margin-top:.5vh">Build</div>
+<div class="fb" style="font-size:max(14px,1.1vw);opacity:.7;margin-top:.5vh">We embed. Tools go live. Automations deploy. Pipelines fill. Your team operates with us shoulder-to-shoulder.</div>
+</div>
+<div style="padding:2.5vh 0">
+<div class="fm" style="font-size:max(11px,.85vw);letter-spacing:.2em;opacity:.4">ONGOING</div>
+<div class="fd" style="font-size:max(20px,2.2vw);font-weight:900;margin-top:.5vh">Compound</div>
+<div class="fb" style="font-size:max(14px,1.1vw);opacity:.7;margin-top:.5vh">The system runs. AI automation compounds. We optimize, refine, and make ourselves unnecessary.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 11: CASE RESULTS (Dark) -->
+<div class="page dark">
+<div class="gr">08</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">RESULTS</div>
+<div class="sh">Numbers, Not Narratives</div>
+<div class="sub">SELECTED CLIENT OUTCOMES</div>
+<div class="sd">These aren't projections. These are measured outcomes from companies that trusted us with their GTM.</div>
+</div>
+<div class="s-r">
+<div style="margin-top:1vh">
+<div style="padding:2vh 0;border-bottom:1px solid rgba(245,245,240,.1)">
+<div class="fd" style="font-size:max(18px,1.8vw);font-weight:700">TruckX</div>
+<div class="fb" style="font-size:max(14px,1.1vw);opacity:.7;margin-top:.5vh">$2M → $16M ARR in 18 months</div>
+</div>
+<div style="padding:2vh 0;border-bottom:1px solid rgba(245,245,240,.1)">
+<div class="fd" style="font-size:max(18px,1.8vw);font-weight:700">Datatruck</div>
+<div class="fb" style="font-size:max(14px,1.1vw);opacity:.7;margin-top:.5vh">Zero to $2.5M ARR. 97% CAC reduction.</div>
+</div>
+<div style="padding:2vh 0;border-bottom:1px solid rgba(245,245,240,.1)">
+<div class="fd" style="font-size:max(18px,1.8vw);font-weight:700">AtoB</div>
+<div class="fb" style="font-size:max(14px,1.1vw);opacity:.7;margin-top:.5vh">7% U.S. market share. $800M valuation. 40% CSAT improvement.</div>
+</div>
+<div style="padding:2vh 0;border-bottom:1px solid rgba(245,245,240,.1)">
+<div class="fd" style="font-size:max(18px,1.8vw);font-weight:700">Payoneer</div>
+<div class="fb" style="font-size:max(14px,1.1vw);opacity:.7;margin-top:.5vh">93 meetings booked. 44 closed deals. 4 months.</div>
+</div>
+<div style="padding:2vh 0;border-bottom:1px solid rgba(245,245,240,.1)">
+<div class="fd" style="font-size:max(18px,1.8vw);font-weight:700">Mudflap</div>
+<div class="fb" style="font-size:max(14px,1.1vw);opacity:.7;margin-top:.5vh">150% conversion increase.</div>
+</div>
+<div style="padding:2vh 0">
+<div class="fd" style="font-size:max(18px,1.8vw);font-weight:700">DigitalOcean</div>
+<div class="fb" style="font-size:max(14px,1.1vw);opacity:.7;margin-top:.5vh">New market entry. New pipeline built.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 12: WHO THIS IS FOR (Light) -->
+<div class="page light">
+<div class="gr">09</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">FIT</div>
+<div class="sh">This Is for Companies That Execute</div>
+<div class="sub">IDEAL CLIENT PROFILE</div>
+<div class="sd">We work best with companies that have product-market fit but need GTM-market fit. You're selling. Revenue is growing. But the engine is manual, the stack is messy, and you know you're leaving money on the table.</div>
+</div>
+<div class="s-r">
+<div style="margin-top:1vh">
+<div style="padding:2vh 0;border-bottom:1px solid rgba(10,10,10,.1)">
+<div class="fm" style="font-size:max(11px,.85vw);letter-spacing:.15em;opacity:.5">INDUSTRIES</div>
+<div class="fb" style="font-size:max(15px,1.2vw);margin-top:1vh;line-height:1.6">Logistics & Freight · Fintech · Cloud SaaS · InsurTech · PropTech · Manufacturing · Professional Services</div>
+</div>
+<div style="padding:2vh 0;border-bottom:1px solid rgba(10,10,10,.1)">
+<div class="fm" style="font-size:max(11px,.85vw);letter-spacing:.15em;opacity:.5">STAGE</div>
+<div class="fb" style="font-size:max(15px,1.2vw);margin-top:1vh;line-height:1.6">$1M–$50M ARR. Series A through growth. Teams of 10–500. Past the "figuring it out" phase, ready to systematize.</div>
+</div>
+<div style="padding:2vh 0">
+<div class="fm" style="font-size:max(11px,.85vw);letter-spacing:.15em;opacity:.5">SIGNALS YOU NEED US</div>
+<div class="fb" style="font-size:max(15px,1.2vw);margin-top:1vh;line-height:1.6">Your CRM is a mess. Your SDRs are doing manual research. You're paying for tools nobody uses. Your forecast is a guess. You've tried a consultant — they left a deck and disappeared.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 13: WHY DATAGRID (Dark) -->
+<div class="page dark">
+<div class="gr">10</div>
+<div class="sl">
+<div class="s-l">
+<div class="ct">WHY US</div>
+<div class="sh">We're Not Consultants. We're Not a Dev Shop. We're the Execution Layer.</div>
+<div class="sd">DataGrid was built by the team behind Phi Consulting — operators who've generated $437M+ in revenue across 40+ companies. We bring consulting-grade strategy with engineering-grade execution. And we stay until the system runs without us.</div>
+</div>
+<div class="s-r">
+<div class="mc">40+</div>
+<div class="ml">Companies Scaled</div>
+<div class="mc" style="margin-top:2vh">$437M+</div>
+<div class="ml">Revenue Generated</div>
+<div class="cb">
+<div class="cl">The DataGrid Difference</div>
+<div class="cx">Consultants sell strategy and leave. Dev shops build what you ask for — even if it's wrong. We do both: design the revenue system, build it, wire AI into it, and operate it with you. Then we make ourselves unnecessary. That's the job.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 14: BACK COVER -->
+<div class="page dark" style="display:flex;flex-direction:column;justify-content:center">
+<div class="cv-m">AI-NATIVE REVENUE OPERATIONS</div>
+<div class="cv-r"></div>
+<div class="fd" style="font-size:max(32px,4vw);font-weight:700;line-height:1.15;margin-bottom:3vh">Your GTM engine should<br>compound, not crumble.</div>
+<div class="fb" style="font-size:max(17px,1.6vw);line-height:1.5;opacity:.75;margin-bottom:4vh;max-width:50vw">Business Intelligence. Tooling. Strategy.<br>BITS — across the entire GTM lifecycle.</div>
+<div class="fm" style="font-size:max(16px,1.4vw);letter-spacing:.25em;opacity:.8">DATA-GRID.AI</div>
+<div class="fm" style="font-size:max(12px,.9vw);opacity:.45;margin-top:2vh;letter-spacing:.1em">saad@data-grid.ai · Get Your AI Roadmap</div>
+<div style="position:absolute;bottom:10vh;right:5vw;text-align:right">
+<div class="fm" style="font-size:max(10px,.75vw);letter-spacing:.2em;opacity:.35">ISSUE 001 · APRIL 2026</div>
+<div class="fm" style="font-size:max(10px,.75vw);letter-spacing:.2em;opacity:.2;margin-top:1vh">FROM THE TEAM BEHIND PHI.CONSULTING</div>
+</div>
+</div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-dots" id="navDots"></div>
+<div class="nav-arrows nav-left" id="navLeft" onclick="go(-1)">← PREV</div>
+<div class="nav-arrows nav-right" id="navRight" onclick="go(1)">NEXT →</div>
+<div class="page-counter" id="pageCounter">01 / 14</div>
+
+<script>
+const mag=document.getElementById('magazine'),total=14;let current=0;
+function go(d){current=Math.max(0,Math.min(total-1,current+d));update()}
+function goTo(i){current=i;update()}
+function update(){
+mag.style.transform=`translateX(-${current*100}vw)`;
+document.getElementById('pageCounter').textContent=`${String(current+1).padStart(2,'0')} / ${total}`;
+document.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+document.getElementById('navLeft').style.opacity=current===0?'0':'.4';
+document.getElementById('navRight').style.opacity=current===total-1?'0':'.4';
+const pg=document.querySelectorAll('.page')[current],dk=pg.classList.contains('dark'),c=dk?'var(--paper)':'var(--ink)';
+document.getElementById('navLeft').style.color=c;document.getElementById('navRight').style.color=c;
+document.getElementById('pageCounter').style.color=dk?'rgba(200,200,200,.4)':'rgba(10,10,10,.35)';
+document.querySelectorAll('.nav-dot').forEach(d=>{d.style.borderColor=dk?'rgba(200,200,200,.5)':'rgba(10,10,10,.35)';d.style.background=d.classList.contains('active')?(dk?'rgba(200,200,200,.9)':'rgba(10,10,10,.7)'):'transparent'});
+}
+const dotsEl=document.getElementById('navDots');
+for(let i=0;i<total;i++){const d=document.createElement('div');d.className='nav-dot';d.onclick=()=>goTo(i);dotsEl.appendChild(d)}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1)});
+let tx=0,tt=false;
+document.addEventListener('touchstart',e=>{tt=true;tx=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{if(!tt)return;tt=false;const d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>50)go(d>0?1:-1)},{passive:true});
+let wc=false;document.addEventListener('wheel',e=>{if(wc)return;const ax=Math.abs(e.deltaX),ay=Math.abs(e.deltaY);if(ax>ay){if(ax>30){go(e.deltaX>0?1:-1);wc=true;setTimeout(()=>wc=false,600)}}else{if(ay>30){go(e.deltaY>0?1:-1);wc=true;setTimeout(()=>wc=false,600)}}},{passive:true});
+update();
+</script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataGrid AI Intelligence — April 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#F5F5F0;--ink:#0A0A0A;--mid:#6B6B6B;--light:#D4D4D0;--accent:#1A1A1A}
+html,body{overflow:hidden;width:100vw;height:100vh;background:var(--ink);font-family:'Source Serif 4',Georgia,serif}
+.magazine{display:flex;width:1400vw;height:100vh;transition:transform .6s cubic-bezier(.25,.1,.25,1)}
+.page{width:100vw;height:100vh;flex-shrink:0;overflow:hidden;position:relative;padding:6vh 5vw 10vh}
+.dark{background:var(--ink);color:var(--paper)}
+.light{background:var(--paper);color:var(--ink)}
+.font-display{font-family:'Playfair Display',serif}
+.font-mono{font-family:'IBM Plex Mono',monospace}
+.font-body{font-family:'Source Serif 4',Georgia,serif}
+
+/* Cover & Back */
+.cover-masthead{font-family:'IBM Plex Mono',monospace;font-size:max(12px,1vw);letter-spacing:.3em;text-transform:uppercase;opacity:.6}
+.cover-title{font-family:'Playfair Display',serif;font-size:max(48px,6.5vw);font-weight:900;line-height:.95;margin:3vh 0 2vh}
+.cover-sub{font-family:'Source Serif 4',serif;font-size:max(18px,1.8vw);font-style:italic;opacity:.75;max-width:55vw;line-height:1.4}
+.cover-meta{font-family:'IBM Plex Mono',monospace;font-size:max(11px,.85vw);letter-spacing:.15em;opacity:.5;margin-top:4vh}
+.cover-brand{position:absolute;bottom:10vh;right:5vw;text-align:right}
+.cover-brand .url{font-family:'IBM Plex Mono',monospace;font-size:max(14px,1.2vw);letter-spacing:.2em;opacity:.7}
+.cover-rule{width:8vw;height:3px;background:var(--paper);margin:2vh 0;opacity:.4}
+
+/* Slide Layout */
+.slide-container{display:grid;grid-template-columns:55fr 45fr;height:100%;gap:4vw;align-items:start;padding-top:2vh}
+.slide-left,.slide-right{display:flex;flex-direction:column;justify-content:flex-start;height:100%}
+.ghost-rank{font-family:'Playfair Display',serif;font-size:max(80px,12vw);font-weight:900;line-height:1;opacity:.06;position:absolute;top:2vh;left:3vw}
+.dark .ghost-rank{opacity:.08}
+.category-tag{font-family:'IBM Plex Mono',monospace;font-size:max(11px,.85vw);letter-spacing:.25em;text-transform:uppercase;padding:6px 14px;border:1px solid;display:inline-block;margin-bottom:2.5vh}
+.dark .category-tag{border-color:rgba(245,245,240,.3);color:rgba(245,245,240,.8)}
+.light .category-tag{border-color:rgba(10,10,10,.3);color:rgba(10,10,10,.7)}
+.slide-headline{font-family:'Playfair Display',serif;font-size:max(28px,5vw);font-weight:900;line-height:1.05;margin-bottom:2vh}
+.repo-path{font-family:'IBM Plex Mono',monospace;font-size:max(13px,1vw);opacity:.5;margin-bottom:2vh;letter-spacing:.05em}
+.slide-desc{font-family:'Source Serif 4',serif;font-size:max(17px,1.5vw);line-height:1.6;max-width:42vw}
+.dark .slide-desc{opacity:.85}
+.light .slide-desc{opacity:.9}
+
+.star-count{font-family:'Playfair Display',serif;font-size:max(42px,6.5vw);font-weight:900;line-height:1;margin-bottom:.5vh}
+.star-label{font-family:'IBM Plex Mono',monospace;font-size:max(10px,.75vw);letter-spacing:.3em;text-transform:uppercase;opacity:.5;margin-bottom:3vh}
+.lang-tag{font-family:'IBM Plex Mono',monospace;font-size:max(11px,.85vw);letter-spacing:.2em;text-transform:uppercase;padding:5px 12px;border:1px solid;display:inline-block;margin-bottom:3vh}
+.dark .lang-tag{border-color:rgba(245,245,240,.25);color:rgba(245,245,240,.65)}
+.light .lang-tag{border-color:rgba(10,10,10,.25);color:rgba(10,10,10,.6)}
+
+.callout{padding:2.5vh 2vw;margin-top:auto;position:relative}
+.dark .callout{background:rgba(245,245,240,.06);border-left:4px solid rgba(245,245,240,.3)}
+.light .callout{background:rgba(10,10,10,.04);border-left:4px solid rgba(10,10,10,.2)}
+.callout-label{font-family:'IBM Plex Mono',monospace;font-size:max(10px,.7vw);letter-spacing:.3em;text-transform:uppercase;margin-bottom:1.2vh;font-weight:600}
+.dark .callout-label{opacity:.6}
+.light .callout-label{opacity:.5}
+.callout-text{font-family:'Source Serif 4',serif;font-size:max(15px,1.2vw);line-height:1.55}
+.dark .callout-text{opacity:.8}
+.light .callout-text{opacity:.85}
+
+/* Navigation */
+.nav-dots{position:fixed;bottom:3vh;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:100}
+.nav-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid rgba(200,200,200,.5);background:transparent;cursor:pointer;transition:all .3s}
+.nav-dot.active{background:rgba(200,200,200,.9);transform:scale(1.3)}
+.nav-arrows{position:fixed;bottom:3vh;z-index:100;font-family:'IBM Plex Mono',monospace;font-size:max(12px,.9vw);letter-spacing:.15em;opacity:.4;cursor:pointer;transition:opacity .2s;user-select:none}
+.nav-arrows:hover{opacity:.8}
+.nav-left{left:3vw;color:var(--paper)}
+.nav-right{right:3vw;color:var(--paper)}
+.page-counter{position:fixed;top:3vh;right:5vw;font-family:'IBM Plex Mono',monospace;font-size:max(10px,.75vw);letter-spacing:.2em;color:rgba(200,200,200,.4);z-index:100}
+
+/* Back cover */
+.back-cta{font-family:'Playfair Display',serif;font-size:max(32px,4vw);font-weight:700;line-height:1.15;margin-bottom:3vh}
+.back-sub{font-family:'Source Serif 4',serif;font-size:max(17px,1.6vw);line-height:1.5;opacity:.75;margin-bottom:4vh;max-width:50vw}
+.back-url{font-family:'IBM Plex Mono',monospace;font-size:max(16px,1.4vw);letter-spacing:.25em;opacity:.8}
+.back-contact{font-family:'IBM Plex Mono',monospace;font-size:max(12px,.9vw);opacity:.45;margin-top:2vh;letter-spacing:.1em}
+</style>
+</head>
+<body>
+
+<div class="magazine" id="magazine">
+
+<!-- PAGE 1: COVER (Dark) -->
+<div class="page dark">
+<div class="cover-masthead">AI TRANSFORMATION INTELLIGENCE</div>
+<div class="cover-rule"></div>
+<div class="cover-title">The 12 Tools<br>Reshaping AI<br>Adoption</div>
+<div class="cover-sub">A curated field guide to the open-source frameworks, platforms, and infrastructure that mid-market companies need to know — right now.</div>
+<div class="cover-meta">ISSUE 001 · APRIL 2026 · ISLAMABAD / DENVER</div>
+<div class="cover-brand">
+<div class="cover-rule" style="margin-left:auto"></div>
+<div class="url">DATA-GRID.AI</div>
+</div>
+</div>
+
+<!-- PAGE 2: Dify (Light) -->
+<div class="page light">
+<div class="ghost-rank">01</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">WORKFLOW PLATFORM</div>
+<div class="slide-headline">Your Team Doesn't Need to Code to Ship AI</div>
+<div class="repo-path">langgenius/dify</div>
+<div class="slide-desc">Production-ready platform for building agentic workflows with a visual drag-and-drop canvas. Built-in RAG, knowledge bases, observability, and support for 100+ LLMs. Self-hosted or cloud — no vendor lock-in.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">136K</div>
+<div class="star-label">GitHub Stars</div>
+<div class="lang-tag">TypeScript</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Build.</strong> This is where non-technical teams go from "we want AI" to "we shipped AI" — without waiting for engineering. Dify lets operations, sales, and support teams prototype their own AI workflows while your dev team focuses on custom integrations. The ROI conversation starts here.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 3: n8n (Dark) -->
+<div class="page dark">
+<div class="ghost-rank">02</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">AUTOMATION ENGINE</div>
+<div class="slide-headline">The Glue Between Every Tool You Already Use</div>
+<div class="repo-path">n8n-io/n8n</div>
+<div class="slide-desc">Fair-code workflow automation with 400+ integrations and native AI capabilities. The latest update adds deep MCP support, making it the fastest way to wire AI agents into multi-step automation pipelines.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">162K</div>
+<div class="star-label">GitHub Stars</div>
+<div class="lang-tag">TypeScript</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Strategy → Build.</strong> Before you build custom AI, audit what n8n can automate today. Most mid-market companies have 15-25 critical systems. n8n connects them without code. We use it to prove ROI in week one — then layer intelligence on top.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 4: LangChain/LangGraph (Light) -->
+<div class="page light">
+<div class="ghost-rank">03</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">AGENT FRAMEWORK</div>
+<div class="slide-headline">The Foundation Everything Else Builds On</div>
+<div class="repo-path">langchain-ai/langchain + langgraph</div>
+<div class="slide-desc">The most adopted agent engineering platform. LangChain provides modular chains, tools, and memory. LangGraph adds stateful graph-based orchestration for production workflows with checkpointing and explicit state management.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">132K</div>
+<div class="star-label">GitHub Stars</div>
+<div class="lang-tag">Python / JS</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Build.</strong> LangGraph is what we reach for when the workflow gets serious — multi-step approvals, human-in-the-loop, error recovery. If your AI needs to make decisions across departments, this is the production backbone. Not beginner-friendly, but battle-tested.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 5: RAGFlow (Dark) -->
+<div class="page dark">
+<div class="ghost-rank">04</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">RAG INFRASTRUCTURE</div>
+<div class="slide-headline">Stop Your AI From Making Things Up</div>
+<div class="repo-path">infiniflow/ragflow</div>
+<div class="slide-desc">Open-source RAG engine that fuses retrieval-augmented generation with agent capabilities. End-to-end framework: document ingestion, vector indexing, query planning, citation tracking, and multi-step reasoning — all grounded in your actual data.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">77K</div>
+<div class="star-label">GitHub Stars</div>
+<div class="lang-tag">Python</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Build.</strong> The #1 question from every client: "How do we make sure the AI doesn't hallucinate?" RAGFlow is the answer. It grounds every response in your documents, tracks citations, and gives compliance teams the traceability they need. Essential for finance, legal, and insurance.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 6: Ollama (Light) -->
+<div class="page light">
+<div class="ghost-rank">05</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">LOCAL INFERENCE</div>
+<div class="slide-headline">Run AI on Your Own Hardware. No Cloud. No Risk.</div>
+<div class="repo-path">ollama/ollama</div>
+<div class="slide-desc">Lightweight framework for running and managing large language models locally. One command to download and serve models like Llama 4, Qwen 3, and Codestral. Private, offline, no data leaves your building.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">147K</div>
+<div class="star-label">GitHub Stars</div>
+<div class="lang-tag">Go</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Strategy.</strong> Data sovereignty isn't optional anymore. Before you send a single document to an API, ask: does this need to leave our network? Ollama lets you run "70B-class" intelligence on a single server. For regulated industries, this is where the AI roadmap starts.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 7: CrewAI (Dark) -->
+<div class="page dark">
+<div class="ghost-rank">06</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">MULTI-AGENT SYSTEM</div>
+<div class="slide-headline">Build a Team of AI Specialists in an Afternoon</div>
+<div class="repo-path">crewAIInc/crewAI</div>
+<div class="slide-desc">Role-based agent orchestration where you define agents as team members — researcher, writer, analyst — and let them collaborate on complex tasks. Fastest path from zero to working multi-agent demo. Used by 60%+ of Fortune 500.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">48K</div>
+<div class="star-label">GitHub Stars</div>
+<div class="lang-tag">Python</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Enablement.</strong> CrewAI is our go-to for executive demos. When a C-suite says "show me what agents actually do," we spin up a crew in 2 hours. The mental model — "a team of specialists" — clicks instantly. Start here, graduate to LangGraph when you scale.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 8: Mem0 (Light) -->
+<div class="page light">
+<div class="ghost-rank">07</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">MEMORY LAYER</div>
+<div class="slide-headline">AI That Actually Remembers Who You Are</div>
+<div class="repo-path">mem0ai/mem0</div>
+<div class="slide-desc">Universal memory layer for AI agents — persistent context across sessions. Long-term, short-term, and semantic memory extraction. The missing piece that turns a chatbot into a relationship.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">52K</div>
+<div class="star-label">GitHub Stars</div>
+<div class="lang-tag">Python</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Build.</strong> Every AI project hits the same wall: "why doesn't it remember what I told it yesterday?" Mem0 solves this. For customer support agents, sales assistants, and internal knowledge bots — memory is the difference between a toy and a tool your team actually uses.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: Google ADK (Dark) -->
+<div class="page dark">
+<div class="ghost-rank">08</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">AGENT DEV KIT</div>
+<div class="slide-headline">Google's Bet on Agents That Talk to Other Agents</div>
+<div class="repo-path">google/adk-python</div>
+<div class="slide-desc">Modular agent development kit with native Gemini integration. The only framework with native A2A (Agent-to-Agent) protocol support — your agents can communicate with agents built on any other framework. 50+ launch partners.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">8.2K</div>
+<div class="star-label">Stars (2 Weeks)</div>
+<div class="lang-tag">Python</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Strategy.</strong> A2A is the protocol to watch. If you're a GCP shop, ADK is the natural starting point. But the real signal is interoperability — Google is betting that agents from different vendors need to collaborate. Plan your architecture with this future in mind.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 10: Unsloth (Light) -->
+<div class="page light">
+<div class="ghost-rank">09</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">FINE-TUNING</div>
+<div class="slide-headline">Train Your Own Model Without Burning Cash</div>
+<div class="repo-path">unsloth/unsloth</div>
+<div class="slide-desc">2x faster fine-tuning with 70% less memory. Supports Llama 4, Qwen 3, and Mistral. Makes custom model training accessible to teams without massive GPU budgets — the democratization of model customization.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">45K</div>
+<div class="star-label">GitHub Stars</div>
+<div class="lang-tag">Python</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Build.</strong> Most companies don't need to fine-tune — until they do. When your industry has specialized vocabulary, compliance requirements, or domain-specific reasoning, Unsloth cuts the cost from "enterprise budget" to "startup budget." We use it when off-the-shelf models aren't enough.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 11: Firecrawl (Dark) -->
+<div class="page dark">
+<div class="ghost-rank">10</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">DATA PIPELINE</div>
+<div class="slide-headline">Turn Any Website Into Clean Data for Your AI</div>
+<div class="repo-path">mendableai/firecrawl</div>
+<div class="slide-desc">Web scraping API built specifically for LLMs. Converts entire websites into clean markdown that AI can actually process. Handles JavaScript rendering, anti-bot detection, and structured extraction at scale.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">35K</div>
+<div class="star-label">GitHub Stars</div>
+<div class="lang-tag">TypeScript</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Strategy → Build.</strong> AI is only as good as its data. Firecrawl solves the "how do we get external data into our AI?" problem. Competitive pricing intelligence, market research, lead enrichment — this is the data ingestion layer that makes RAG actually work.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 12: MCP Servers (Light) -->
+<div class="page light">
+<div class="ghost-rank">11</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">PROTOCOL STANDARD</div>
+<div class="slide-headline">The USB-C of AI Integration</div>
+<div class="repo-path">modelcontextprotocol/servers</div>
+<div class="slide-desc">Model Context Protocol — an open standard for connecting AI models to external tools, data sources, and services. One protocol, universal compatibility. Already supported by every major framework. The integration layer that makes everything else work together.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">60K</div>
+<div class="star-label">GitHub Stars</div>
+<div class="lang-tag">TypeScript</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Strategy.</strong> MCP is the single most important standard in AI right now. If your team builds one MCP server for your internal database, every AI tool can use it — Claude, GPT, Gemini, open-source. Invest in MCP early. It's the safest infrastructure bet in 2026.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 13: Langflow (Dark) -->
+<div class="page dark">
+<div class="ghost-rank">12</div>
+<div class="slide-container">
+<div class="slide-left">
+<div class="category-tag">VISUAL BUILDER</div>
+<div class="slide-headline">Drag, Drop, Deploy. AI Without the Learning Curve.</div>
+<div class="repo-path">langflow-ai/langflow</div>
+<div class="slide-desc">Visual drag-and-drop builder for AI-powered agents and workflows built on LangChain. Design multi-agent conversations, manage memory and retrieval, then deploy as APIs — all without writing extensive code. The Figma of AI development.</div>
+</div>
+<div class="slide-right">
+<div class="star-count">147K</div>
+<div class="star-label">GitHub Stars</div>
+<div class="lang-tag">Python</div>
+<div class="callout">
+<div class="callout-label">DataGrid Take</div>
+<div class="callout-text"><strong>Phase: Enablement.</strong> When we train client teams on AI, Langflow is day one. It makes the abstract concrete — your operations manager can literally see how an AI workflow connects to their CRM, processes data, and generates output. Understanding kills fear. Langflow kills the "AI is magic" misconception.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 14: BACK COVER (Dark) -->
+<div class="page dark" style="display:flex;flex-direction:column;justify-content:center">
+<div class="cover-masthead">AI TRANSFORMATION INTELLIGENCE</div>
+<div class="cover-rule"></div>
+<div class="back-cta">80% of AI projects fail.<br>Yours won't.</div>
+<div class="back-sub">We help mid-market companies turn AI hype into real business outcomes. Strategy. Enablement. Build. Stay.</div>
+<div class="back-url">DATA-GRID.AI</div>
+<div class="back-contact">saad@data-grid.ai · Get Your AI Roadmap</div>
+<div style="position:absolute;bottom:10vh;right:5vw;text-align:right">
+<div class="font-mono" style="font-size:max(10px,.75vw);letter-spacing:.2em;opacity:.35">ISSUE 001 · APRIL 2026</div>
+<div class="font-mono" style="font-size:max(10px,.75vw);letter-spacing:.2em;opacity:.25;margin-top:1vh">COMPILED BY DATAGRID AI</div>
+</div>
+</div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-dots" id="navDots"></div>
+<div class="nav-arrows nav-left" id="navLeft" onclick="go(-1)">← PREV</div>
+<div class="nav-arrows nav-right" id="navRight" onclick="go(1)">NEXT →</div>
+<div class="page-counter" id="pageCounter">01 / 14</div>
+
+<script>
+const mag=document.getElementById('magazine');
+const total=14;
+let current=0;
+let touching=false,touchX=0;
+
+function go(dir){
+  current=Math.max(0,Math.min(total-1,current+dir));
+  update();
+}
+function goTo(i){current=i;update()}
+function update(){
+  mag.style.transform=`translateX(-${current*100}vw)`;
+  document.getElementById('pageCounter').textContent=`${String(current+1).padStart(2,'0')} / ${total}`;
+  document.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  document.getElementById('navLeft').style.opacity=current===0?'0':'.4';
+  document.getElementById('navRight').style.opacity=current===total-1?'0':'.4';
+  // Update arrow colors based on current page
+  const pg=document.querySelectorAll('.page')[current];
+  const isDark=pg.classList.contains('dark');
+  const col=isDark?'var(--paper)':'var(--ink)';
+  document.getElementById('navLeft').style.color=col;
+  document.getElementById('navRight').style.color=col;
+  document.getElementById('pageCounter').style.color=isDark?'rgba(200,200,200,.4)':'rgba(10,10,10,.35)';
+  document.querySelectorAll('.nav-dot').forEach(d=>{
+    d.style.borderColor=isDark?'rgba(200,200,200,.5)':'rgba(10,10,10,.35)';
+    if(d.classList.contains('active'))d.style.background=isDark?'rgba(200,200,200,.9)':'rgba(10,10,10,.7)';
+    else d.style.background='transparent';
+  });
+}
+
+// Build dots
+const dotsEl=document.getElementById('navDots');
+for(let i=0;i<total;i++){
+  const d=document.createElement('div');
+  d.className='nav-dot';
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+}
+
+// Keys
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(1);
+  if(e.key==='ArrowLeft')go(-1);
+});
+
+// Touch
+document.addEventListener('touchstart',e=>{touching=true;touchX=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(!touching)return;touching=false;
+  const diff=touchX-e.changedTouches[0].clientX;
+  if(Math.abs(diff)>50)go(diff>0?1:-1);
+},{passive:true});
+
+// Wheel
+let wheelCooldown=false;
+document.addEventListener('wheel',e=>{
+  if(wheelCooldown)return;
+  if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){
+    if(Math.abs(e.deltaX)>30){go(e.deltaX>0?1:-1);wheelCooldown=true;setTimeout(()=>wheelCooldown=false,600)}
+  }else{
+    if(Math.abs(e.deltaY)>30){go(e.deltaY>0?1:-1);wheelCooldown=true;setTimeout(()=>wheelCooldown=false,600)}
+  }
+},{passive:true});
+
+update();
+</script>
+</body>
+</html>

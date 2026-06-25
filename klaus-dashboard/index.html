@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KLAUS — SYSTEM DASHBOARD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@400;700&family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  /* ── LIGHT MODE TOKENS ─────────────────────────── */
+  :root {
+    --black:           #F5F5F5;
+    --surface:         #FFFFFF;
+    --surface-raised:  #F0F0F0;
+    --border:          #E8E8E8;
+    --border-visible:  #CCCCCC;
+    --text-disabled:   #999999;
+    --text-secondary:  #666666;
+    --text-primary:    #1A1A1A;
+    --text-display:    #000000;
+    --accent:          #D71921;
+    --accent-subtle:   rgba(215,25,33,0.08);
+    --success:         #4A9E5C;
+    --warning:         #D4A843;
+    --interactive:     #007AFF;
+
+    --space-xs:  4px;
+    --space-sm:  8px;
+    --space-md:  16px;
+    --space-lg:  24px;
+    --space-xl:  32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: var(--space-xl);
+  }
+
+  /* ── PAGE HEADER ──────────────────────────────── */
+  .page-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-2xl);
+    border-bottom: 1px solid var(--border-visible);
+    padding-bottom: var(--space-md);
+  }
+  .page-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+  }
+  .page-title span {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .page-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--text-disabled);
+    text-transform: uppercase;
+  }
+
+  /* ── HERO ROW ─────────────────────────────────── */
+  .hero-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  /* ── CARD BASE ────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: var(--space-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-bottom: var(--space-sm);
+  }
+  .card-hero {
+    font-family: 'Doto', 'Space Mono', monospace;
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--text-display);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .card-hero-unit {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-top: var(--space-xs);
+  }
+  .card-sub {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: var(--space-sm);
+  }
+
+  /* ── STATUS DOT ───────────────────────────────── */
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+    position: absolute;
+    top: var(--space-lg);
+    right: var(--space-lg);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .status-dot.warn { background: var(--warning); animation: none; }
+  .status-dot.error { background: var(--accent); animation: none; }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ── UPTIME CARD HERO ─────────────────────────── */
+  .uptime-value {
+    font-family: 'Doto', monospace;
+    font-size: 72px;
+    font-weight: 700;
+    color: var(--success);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── MIDDLE GRID ──────────────────────────────── */
+  .mid-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  /* ── ACTIVITY CHART ───────────────────────────── */
+  .chart-area {
+    margin-top: var(--space-md);
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 80px;
+  }
+  .bar {
+    flex: 1;
+    background: var(--text-display);
+    border-radius: 2px 2px 0 0;
+    min-height: 4px;
+    transition: background 0.2s;
+    cursor: pointer;
+    position: relative;
+  }
+  .bar:hover { background: var(--accent); }
+  .bar.accent { background: var(--accent); }
+  .chart-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--space-xs);
+  }
+  .chart-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-disabled);
+    text-transform: uppercase;
+  }
+
+  /* ── SEGMENTED PROGRESS BAR ───────────────────── */
+  .seg-bar-wrap {
+    margin-top: var(--space-md);
+  }
+  .seg-bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--space-xs);
+  }
+  .seg-bar-track {
+    display: flex;
+    gap: 2px;
+    height: 8px;
+  }
+  .seg {
+    flex: 1;
+    background: #E0E0E0;
+    border-radius: 1px;
+  }
+  .seg.filled { background: var(--text-display); }
+  .seg.filled-success { background: var(--success); }
+  .seg.filled-warn { background: var(--warning); }
+  .seg.filled-accent { background: var(--accent); }
+  .seg-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--text-primary);
+  }
+
+  /* ── STAT LIST ────────────────────────────────── */
+  .stat-list { margin-top: var(--space-md); }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+  }
+  .stat-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--text-primary);
+  }
+  .stat-val.success { color: var(--success); }
+  .stat-val.warn    { color: var(--warning); }
+  .stat-val.accent  { color: var(--accent); }
+
+  /* ── SKILLS GRID ──────────────────────────────── */
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .skill-chip-grid {
+    margin-top: var(--space-md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+  .skill-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid var(--border-visible);
+    border-radius: 999px;
+    color: var(--text-secondary);
+  }
+  .skill-chip.active {
+    border-color: var(--text-display);
+    color: var(--text-display);
+    background: transparent;
+  }
+  .skill-chip.hot {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── IDENTITY CARD ────────────────────────────── */
+  .identity-hero {
+    margin-top: var(--space-sm);
+  }
+  .identity-name {
+    font-family: 'Doto', monospace;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--text-display);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .identity-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-top: var(--space-sm);
+  }
+  .crab-mark {
+    position: absolute;
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    font-size: 40px;
+    opacity: 0.12;
+    user-select: none;
+  }
+
+  /* ── RECENT EVENTS ────────────────────────────── */
+  .event-list { margin-top: var(--space-md); }
+  .event-row {
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .event-row:last-child { border-bottom: none; }
+  .event-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-disabled);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    padding-top: 2px;
+  }
+  .event-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+  .event-text .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+
+  /* ── DOT GRID BACKGROUND ──────────────────────── */
+  .dot-bg {
+    background-image: radial-gradient(circle, var(--border) 0.5px, transparent 0.5px);
+    background-size: 12px 12px;
+  }
+
+  /* ── GAUGE WIDGET ─────────────────────────────── */
+  .gauge-wrap {
+    margin-top: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .gauge-inner {
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+  .gauge-inner svg { width: 100%; height: 100%; }
+  .gauge-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .gauge-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    color: var(--text-display);
+    line-height: 1;
+  }
+  .gauge-unit {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── FOOTER ───────────────────────────────────── */
+  .footer {
+    margin-top: var(--space-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+  }
+  .footer-left {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-disabled);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .footer-right {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── RESPONSIVE ───────────────────────────────── */
+  @media (max-width: 900px) {
+    .hero-row, .bottom-row { grid-template-columns: 1fr 1fr; }
+    .mid-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    body { padding: var(--space-md); }
+    .hero-row, .bottom-row { grid-template-columns: 1fr; }
+    .card-hero { font-size: 48px; }
+    .identity-name { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-title"><span>KLAUS</span> — SYSTEM DASHBOARD</div>
+  <div class="page-meta" id="live-time">LOADING...</div>
+</div>
+
+<!-- HERO ROW: 3 big stats -->
+<div class="hero-row">
+
+  <!-- Messages handled today -->
+  <div class="card">
+    <div class="status-dot"></div>
+    <div class="card-label">Messages Today</div>
+    <div class="card-hero" id="msg-count">247</div>
+    <div class="card-hero-unit">CONVERSATIONS</div>
+    <div class="card-sub">↑ 18% from yesterday</div>
+  </div>
+
+  <!-- Uptime -->
+  <div class="card">
+    <div class="status-dot"></div>
+    <div class="card-label">Uptime</div>
+    <div class="uptime-value">99.7<span style="font-size:36px">%</span></div>
+    <div class="card-hero-unit">LAST 30 DAYS</div>
+    <div class="card-sub">12d 7h 43m continuous</div>
+  </div>
+
+  <!-- Response latency -->
+  <div class="card">
+    <div class="status-dot warn"></div>
+    <div class="card-label">Avg Latency</div>
+    <div class="card-hero" style="color: var(--warning);">1.4</div>
+    <div class="card-hero-unit">SECONDS · P50</div>
+    <div class="card-sub">P95: 4.2s · P99: 8.1s</div>
+  </div>
+
+</div>
+
+<!-- MID ROW: activity chart + session stats -->
+<div class="mid-row">
+
+  <!-- Activity chart -->
+  <div class="card">
+    <div class="card-label">Message Activity — Last 7 Days</div>
+    <div class="chart-area" id="chart-bars"></div>
+    <div class="chart-labels">
+      <span class="chart-label">MON</span>
+      <span class="chart-label">TUE</span>
+      <span class="chart-label">WED</span>
+      <span class="chart-label">THU</span>
+      <span class="chart-label">FRI</span>
+      <span class="chart-label">SAT</span>
+      <span class="chart-label">SUN</span>
+    </div>
+
+    <!-- Segmented bars: tool usage -->
+    <div style="margin-top: var(--space-lg);">
+      <div class="seg-bar-wrap">
+        <div class="seg-bar-header">
+          <span class="card-label" style="margin:0">Web Search</span>
+          <span class="seg-value">68%</span>
+        </div>
+        <div class="seg-bar-track" id="bar-web"></div>
+      </div>
+      <div class="seg-bar-wrap" style="margin-top:12px">
+        <div class="seg-bar-header">
+          <span class="card-label" style="margin:0">Code / Bash</span>
+          <span class="seg-value">42%</span>
+        </div>
+        <div class="seg-bar-track" id="bar-code"></div>
+      </div>
+      <div class="seg-bar-wrap" style="margin-top:12px">
+        <div class="seg-bar-header">
+          <span class="card-label" style="margin:0">Image Gen</span>
+          <span class="seg-value">21%</span>
+        </div>
+        <div class="seg-bar-track" id="bar-img"></div>
+      </div>
+      <div class="seg-bar-wrap" style="margin-top:12px">
+        <div class="seg-bar-header">
+          <span class="card-label" style="margin:0">Memory Ops</span>
+          <span class="seg-value">89%</span>
+        </div>
+        <div class="seg-bar-track" id="bar-mem"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session stats panel -->
+  <div class="card">
+    <div class="card-label">Session Stats</div>
+    <div class="stat-list">
+      <div class="stat-row">
+        <span class="stat-label">Model</span>
+        <span class="stat-val">Claude 3.7</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Session</span>
+        <span class="stat-val">+17206598123</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Tokens (ctx)</span>
+        <span class="stat-val">128 K</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Clicks Active</span>
+        <span class="stat-val success">3</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Sub-Agents</span>
+        <span class="stat-val">1 running</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Skills Loaded</span>
+        <span class="stat-val">24</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">MCP Servers</span>
+        <span class="stat-val success">7 online</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Errors (24h)</span>
+        <span class="stat-val accent">2</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM ROW: identity + skills + events -->
+<div class="bottom-row">
+
+  <!-- Identity card -->
+  <div class="card dot-bg">
+    <div class="status-dot"></div>
+    <div class="card-label">Identity</div>
+    <div class="identity-hero">
+      <div class="identity-name">KLAUS</div>
+      <div class="identity-sub">クラウス · Pixel Crab · Crab Red #D04040</div>
+    </div>
+    <div style="margin-top: var(--space-lg);">
+      <div class="seg-bar-wrap">
+        <div class="seg-bar-header">
+          <span class="card-label" style="margin:0">Lateral Thinking</span>
+          <span class="seg-value" style="color:var(--success)">97%</span>
+        </div>
+        <div class="seg-bar-track" id="bar-lat"></div>
+      </div>
+      <div class="seg-bar-wrap" style="margin-top:10px">
+        <div class="seg-bar-header">
+          <span class="card-label" style="margin:0">Wit Index</span>
+          <span class="seg-value" style="color:var(--success)">91%</span>
+        </div>
+        <div class="seg-bar-track" id="bar-wit"></div>
+      </div>
+      <div class="seg-bar-wrap" style="margin-top:10px">
+        <div class="seg-bar-header">
+          <span class="card-label" style="margin:0">Sycophancy</span>
+          <span class="seg-value" style="color:var(--accent)">0%</span>
+        </div>
+        <div class="seg-bar-track" id="bar-syco"></div>
+      </div>
+    </div>
+    <div class="crab-mark">🦀</div>
+  </div>
+
+  <!-- Active skills -->
+  <div class="card">
+    <div class="card-label">Active Skills</div>
+    <div class="skill-chip-grid">
+      <span class="skill-chip active">artifacts</span>
+      <span class="skill-chip hot">nothing-design</span>
+      <span class="skill-chip active">agentmail</span>
+      <span class="skill-chip active">remind-me</span>
+      <span class="skill-chip active">dart</span>
+      <span class="skill-chip active">blended-art</span>
+      <span class="skill-chip">sprite</span>
+      <span class="skill-chip active">pdf</span>
+      <span class="skill-chip">pptx</span>
+      <span class="skill-chip active">threejs</span>
+      <span class="skill-chip">xlsx</span>
+      <span class="skill-chip active">summarize</span>
+      <span class="skill-chip hot">twitter</span>
+      <span class="skill-chip active">chrome</span>
+      <span class="skill-chip">idea</span>
+      <span class="skill-chip active">pine-voice</span>
+    </div>
+
+    <!-- Gauge -->
+    <div class="gauge-wrap">
+      <div class="gauge-inner">
+        <svg viewBox="0 0 120 120">
+          <!-- track -->
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#E8E8E8" stroke-width="6" />
+          <!-- fill: 87% of circumference -->
+          <circle cx="60" cy="60" r="48"
+            fill="none"
+            stroke="#4A9E5C"
+            stroke-width="6"
+            stroke-linecap="butt"
+            stroke-dasharray="263 302"
+            stroke-dashoffset="75.5"
+            transform="rotate(-90 60 60)" />
+          <!-- tick marks -->
+          <g stroke="#CCCCCC" stroke-width="1">
+            <line x1="60" y1="7" x2="60" y2="14" />
+            <line x1="60" y1="106" x2="60" y2="113" />
+            <line x1="7" y1="60" x2="14" y2="60" />
+            <line x1="106" y1="60" x2="113" y2="60" />
+          </g>
+        </svg>
+        <div class="gauge-center">
+          <div class="gauge-val">87</div>
+          <div class="gauge-unit">HEALTH</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent events -->
+  <div class="card">
+    <div class="card-label">Recent Events</div>
+    <div class="event-list">
+      <div class="event-row">
+        <span class="event-time">Now</span>
+        <span class="event-text"><span class="tag">artifact</span>Nothing Design dashboard deployed</span>
+      </div>
+      <div class="event-row">
+        <span class="event-time">02m ago</span>
+        <span class="event-text"><span class="tag">skill</span>nothing-design SKILL.md read</span>
+      </div>
+      <div class="event-row">
+        <span class="event-time">14m ago</span>
+        <span class="event-text">Session started — morning check-in</span>
+      </div>
+      <div class="event-row">
+        <span class="event-time">38m ago</span>
+        <span class="event-text"><span class="tag">search</span>Meta Muse Spark · Anthropic Mythos</span>
+      </div>
+      <div class="event-row">
+        <span class="event-time">1h ago</span>
+        <span class="event-text">html-in-canvas deep dive</span>
+      </div>
+      <div class="event-row">
+        <span class="event-time">Yesterday</span>
+        <span class="event-text"><span class="tag" style="color:var(--warning)">warn</span>Brave Search rate limit hit</span>
+      </div>
+      <div class="event-row">
+        <span class="event-time">2d ago</span>
+        <span class="event-text"><span class="tag">click</span>btc-price-check enabled</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">KLAUS v3.0 · WHATSAPP NODE · ISB/PKT</div>
+  <div class="footer-right">● ONLINE</div>
+</div>
+
+<script>
+  // Live time
+  function updateTime() {
+    const now = new Date();
+    const opts = { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+    const t = now.toLocaleTimeString('en-US', opts);
+    const d = now.toLocaleDateString('en-US', { timeZone: 'Asia/Karachi', weekday: 'short', month: 'short', day: 'numeric' });
+    document.getElementById('live-time').textContent = `${d.toUpperCase()} · ${t} PKT`;
+  }
+  updateTime();
+  setInterval(updateTime, 1000);
+
+  // Chart bars
+  const data = [112, 189, 203, 156, 247, 98, 171];
+  const max = Math.max(...data);
+  const container = document.getElementById('chart-bars');
+  data.forEach((v, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'bar' + (i === 4 ? ' accent' : '');
+    bar.style.height = (v / max * 100) + '%';
+    container.appendChild(bar);
+  });
+
+  // Segmented bars
+  function buildSegBar(id, pct, type = 'filled') {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const total = 20;
+    const filled = Math.round(pct / 100 * total);
+    el.innerHTML = '';
+    for (let i = 0; i < total; i++) {
+      const s = document.createElement('div');
+      s.className = 'seg' + (i < filled ? ` ${type}` : '');
+      el.appendChild(s);
+    }
+  }
+
+  buildSegBar('bar-web', 68, 'filled');
+  buildSegBar('bar-code', 42, 'filled');
+  buildSegBar('bar-img', 21, 'filled');
+  buildSegBar('bar-mem', 89, 'filled-success');
+  buildSegBar('bar-lat', 97, 'filled-success');
+  buildSegBar('bar-wit', 91, 'filled-success');
+  buildSegBar('bar-syco', 0, 'filled-accent');
+
+  // Animated message counter
+  let base = 247;
+  setInterval(() => {
+    if (Math.random() > 0.7) {
+      base += Math.floor(Math.random() * 3) + 1;
+      document.getElementById('msg-count').textContent = base;
+    }
+  }, 4000);
+</script>
+</body>
+</html>

@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAAD FAROOQ — Profile (Tegaki Edition)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@400;700&family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAFAFA;
+    --paper-alt: #EAE4D9;
+    --card: #FFFDF7;
+    --ink: #1A1612;
+    --ink-soft: #3D3730;
+    --ink-muted: #6B6358;
+    --ink-faint: #9C9488;
+    --ink-ghost: #C4BBB0;
+    --rule: #D1C9BC;
+    --rule-bold: #A89E92;
+    --accent: #1A1612;
+    --spot: #D71921;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Space Grotesk', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Tegaki elements */
+  tegaki-renderer {
+    display: block;
+    color: var(--ink);
+  }
+
+  .tegaki-headline {
+    font-size: clamp(28px, 5vw, 42px);
+    color: var(--ink);
+    min-height: 120px;
+  }
+
+  .tegaki-pull {
+    font-size: 24px;
+    color: var(--ink);
+    min-height: 80px;
+  }
+
+  .tegaki-masthead {
+    font-size: clamp(36px, 7vw, 56px);
+    color: var(--ink);
+    min-height: 70px;
+    display: block;
+    text-align: center;
+  }
+
+  .tegaki-tagline {
+    font-size: 20px;
+    color: var(--ink-muted);
+    min-height: 40px;
+    display: block;
+    text-align: center;
+  }
+
+  .tegaki-colophon {
+    font-size: 16px;
+    color: var(--ink-ghost);
+    min-height: 30px;
+    display: block;
+    text-align: center;
+  }
+
+  /* ═══════════════ MASTHEAD ═══════════════ */
+  .masthead {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 32px 32px 0;
+    border-bottom: 3px double var(--ink);
+  }
+
+  .masthead-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 8px;
+  }
+
+  .masthead-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .masthead-edition {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .masthead-title {
+    font-family: 'Doto', 'Space Mono', monospace;
+    font-size: clamp(42px, 9vw, 72px);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-align: center;
+    padding: 16px 0;
+  }
+
+  .masthead-handwritten {
+    text-align: center;
+    padding: 12px 0 8px;
+  }
+
+  .masthead-subtitle {
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    padding-bottom: 12px;
+  }
+
+  .masthead-rule {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+  }
+
+  .masthead-rule::before,
+  .masthead-rule::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .masthead-rule-dot {
+    width: 4px;
+    height: 4px;
+    background: var(--ink);
+  }
+
+  .newspaper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 32px 64px;
+  }
+
+  .headline-block {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .headline {
+    font-family: 'Space Grotesk', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    max-width: 640px;
+  }
+
+  .headline-deck {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-top: 16px;
+    max-width: 580px;
+  }
+
+  .byline {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 24px;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-head {
+    padding: 40px 0 16px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 24px;
+  }
+
+  .section-kicker {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+  }
+
+  .section-title {
+    font-family: 'Space Grotesk', serif;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  .body-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+
+  .body-text.lede {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .body-text strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .pull-quote {
+    padding: 32px 0;
+    margin: 24px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+
+  .pull-quote::before {
+    content: '"';
+    font-family: Georgia, serif;
+    font-size: 64px;
+    line-height: 1;
+    color: var(--ink-ghost);
+    position: absolute;
+    top: 20px;
+    left: -4px;
+  }
+
+  .pull-quote p {
+    font-family: 'Space Grotesk', serif;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.35;
+    color: var(--ink);
+    padding-left: 28px;
+  }
+
+  .pull-quote .attrib {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 12px;
+    padding-left: 28px;
+  }
+
+  /* Pull quote tegaki variant */
+  .pull-quote-tegaki {
+    padding: 32px 0;
+    margin: 24px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+
+  .pull-quote-tegaki .attrib {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 12px;
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+  }
+
+  .data-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: left;
+    padding: 8px 12px 8px 0;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .data-table td {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+
+  .data-table td:first-child {
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    margin: 24px 0;
+    border: 1px solid var(--rule);
+  }
+
+  .stat-box {
+    background: var(--card);
+    padding: 20px 16px;
+  }
+
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+  }
+
+  .stat-value {
+    font-family: 'Doto', 'Space Mono', monospace;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  .stat-note {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-top: 4px;
+  }
+
+  .timeline {
+    margin: 24px 0;
+    position: relative;
+    padding-left: 24px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--rule-bold);
+  }
+
+  .tl-entry {
+    padding: 0 0 28px 0;
+    position: relative;
+  }
+
+  .tl-entry::before {
+    content: '';
+    position: absolute;
+    left: -23px;
+    top: 7px;
+    width: 7px;
+    height: 7px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+  }
+
+  .tl-entry.current::before {
+    background: var(--ink);
+  }
+
+  .tl-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 2px;
+  }
+
+  .tl-role {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .tl-co {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  .tl-desc {
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  .skill-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .skill-card {
+    border: 1px solid var(--rule);
+    padding: 16px;
+    background: var(--card);
+  }
+
+  .skill-card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+
+  .skill-card-items {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  .skill-count {
+    font-family: 'Doto', monospace;
+    font-size: 20px;
+    color: var(--ink);
+    float: right;
+    margin-top: -2px;
+  }
+
+  .bar-chart { margin: 16px 0; }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 40px;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+  }
+
+  .bar-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-align: right;
+  }
+
+  .bar-track {
+    height: 8px;
+    background: var(--rule);
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--ink);
+  }
+
+  .bar-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+  }
+
+  .artifact-strip {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .artifact-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--rule-bold);
+    padding: 4px 10px;
+    color: var(--ink-muted);
+    background: var(--card);
+  }
+
+  .contact-bar {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 16px 0;
+  }
+
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .contact-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .contact-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--ink);
+  }
+
+  .rec-quote {
+    padding: 16px 0 16px 20px;
+    border-left: 2px solid var(--rule-bold);
+    margin: 16px 0;
+  }
+
+  .rec-quote p {
+    font-family: 'Space Grotesk', serif;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .rec-quote .rec-attrib {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-style: normal;
+    margin-top: 8px;
+  }
+
+  .spot-red { color: var(--spot); }
+
+  .spot-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--spot);
+    border-radius: 0;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .colophon {
+    margin-top: 64px;
+    padding: 24px 0;
+    border-top: 3px double var(--ink);
+  }
+
+  .colophon-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-ghost);
+    text-align: center;
+    line-height: 2;
+  }
+
+  .sep {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 32px 0;
+  }
+
+  .sep-bold {
+    border: none;
+    border-top: 2px solid var(--ink);
+    margin: 32px 0;
+  }
+
+  .ornament {
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--ink-ghost);
+    padding: 16px 0;
+  }
+
+  /* Tegaki badge */
+  .tegaki-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border: 1px solid var(--rule);
+    padding: 2px 8px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  @media (max-width: 640px) {
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    .skill-grid { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .newspaper { padding: 0 20px 48px; }
+    .masthead { padding: 24px 20px 0; }
+    .bar-row { grid-template-columns: 80px 1fr 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════ MASTHEAD ════════════════════ -->
+<header class="masthead">
+  <div class="masthead-top">
+    <span class="masthead-date">Denver, CO / Islamabad, PK</span>
+    <span class="masthead-edition">April 2026 · Tegaki Edition <span class="tegaki-badge">手書き</span></span>
+  </div>
+  <h1 class="masthead-title">SAAD FAROOQ</h1>
+  <p class="masthead-subtitle">Revenue Operations Leader · AI Infrastructure Builder · Freight Tech</p>
+  <div class="masthead-rule"><div class="masthead-rule-dot"></div></div>
+  <div class="contact-bar">
+    <div class="contact-item"><span class="contact-label">Email</span><span class="contact-value">saad@data-grid.ai</span></div>
+    <div class="contact-item"><span class="contact-label">GitHub</span><span class="contact-value">@eSaadster</span></div>
+    <div class="contact-item"><span class="contact-label">Twitter</span><span class="contact-value">@eSaadster</span></div>
+    <div class="contact-item"><span class="contact-label">LinkedIn</span><span class="contact-value">saad-farooq-38aa0675</span></div>
+  </div>
+</header>
+
+<div class="newspaper">
+
+  <!-- ════════════════════ HEADLINE ════════════════════ -->
+  <div class="headline-block">
+    <tegaki-renderer class="tegaki-headline" font="Caveat" speed="2.0">The Operator Who Learned to Build the Machine</tegaki-renderer>
+    <p class="headline-deck">After 13 years scaling hyper-growth tech companies from the inside — DigitalOcean, KeepTruckin, Cloudways — Saad Farooq now builds the communication and orchestration layer between AI agents and the real world. Not demos. Production systems that run 24/7.</p>
+    <div class="byline">Profile compiled from LinkedIn, GitHub, and production systems analysis</div>
+  </div>
+
+  <!-- ════════════════════ THESIS ════════════════════ -->
+  <div class="two-col">
+    <div>
+      <p class="body-text lede">Most people building with AI agents are either business operators who use off-the-shelf tools, or engineers who build technically impressive demos disconnected from revenue.</p>
+      <p class="body-text">Saad is doing both simultaneously — and the two sides feed each other. The RevOps background means every technical decision maps to a business outcome. The engineering means he doesn't just spec what agents should do — he builds the skills, wires the MCPs, deploys the infrastructure, and debugs at 2am when something breaks.</p>
+    </div>
+    <div>
+      <div class="pull-quote-tegaki">
+        <tegaki-renderer class="tegaki-pull" font="Caveat" speed="1.8" loop>AI agents need infrastructure that mirrors human business operations — email, scheduling, browser access, phone calls, CRM, team coordination.</tegaki-renderer>
+        <div class="attrib">— The Thesis</div>
+      </div>
+      <p class="body-text">Saad is building that infrastructure layer by layer, skill by skill, in production. The current focus: <strong>AgenticMail</strong>, <strong>Klaus/Kurausu</strong>, and <strong>Uptime</strong> — an AI-driven freight tech platform born from 5 years of domain expertise at KeepTruckin.</p>
+    </div>
+  </div>
+
+  <!-- ════════════════════ BY THE NUMBERS ════════════════════ -->
+  <div class="section-head">
+    <div class="section-kicker">At a Glance</div>
+    <h3 class="section-title">By the Numbers</h3>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-box">
+      <div class="stat-label">Experience</div>
+      <div class="stat-value">13+</div>
+      <div class="stat-note">years in tech</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Klaus Skills</div>
+      <div class="stat-value">30+</div>
+      <div class="stat-note">custom-built</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Artifacts</div>
+      <div class="stat-value">54</div>
+      <div class="stat-note">published live</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">AgenticMail</div>
+      <div class="stat-value">75+</div>
+      <div class="stat-note">API endpoints</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Repos</div>
+      <div class="stat-value">26</div>
+      <div class="stat-note">6 public, 20 private</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">KeepTruckin</div>
+      <div class="stat-value">96%</div>
+      <div class="stat-note">call pickup rate</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ CAREER ════════════════════ -->
+  <div class="section-head">
+    <div class="section-kicker">Career</div>
+    <h3 class="section-title">Professional Experience</h3>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-entry current">
+      <div class="tl-year">2025 – Present</div>
+      <div class="tl-role"><span class="spot-dot"></span>Founder / Builder</div>
+      <div class="tl-co">Data-Grid · Uptime</div>
+      <div class="tl-desc">AI agent infrastructure (Klaus, AgenticMail). Freight tech — CDL driver recruiting, fleet monitoring, compliance automation for small-to-mid fleets.</div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year">Oct 2023 – Aug 2025</div>
+      <div class="tl-role">Revenue Operations</div>
+      <div class="tl-co">Phi Consulting</div>
+      <div class="tl-desc">Customer retention, churn management, cross-functional engagement. Began integrating AI agents into operational workflows.</div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year">Jan 2024 – Dec 2024</div>
+      <div class="tl-role">Sr. Manager Platform Operations</div>
+      <div class="tl-co">Cloudways</div>
+      <div class="tl-desc">Server performance, upsell strategy, automation initiatives.</div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year">Jan 2022 – Dec 2023</div>
+      <div class="tl-role">Director RevOps — CX & Onboarding</div>
+      <div class="tl-co">DigitalOcean</div>
+      <div class="tl-desc">Managed customer churn and revenue retention. Led cross-functional initiatives across marketing, ops, and technology. Drove NDR and KPI achievement.</div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year">Jul 2020 – Dec 2021</div>
+      <div class="tl-role">Director of Customer Care</div>
+      <div class="tl-co">DigitalOcean</div>
+      <div class="tl-desc">CRM strategy and churn management at scale.</div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year">Feb 2018 – Jul 2020</div>
+      <div class="tl-role">Sr. Manager Tech Support</div>
+      <div class="tl-co">KeepTruckin (now Motive)</div>
+      <div class="tl-desc">Transformed support from cost center into revenue-generating department. 96% call pickup rate vs 4% industry abandonment. This is where the freight domain expertise began — largest ELD/fleet management platform.</div>
+    </div>
+  </div>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- ════════════════════ KLAUS ════════════════════ -->
+  <div class="section-head">
+    <div class="section-kicker">Flagship Project</div>
+    <h3 class="section-title">Klaus / Kurausu (クラウス)</h3>
+  </div>
+
+  <p class="body-text lede">A WhatsApp-native AI agent relay that grew into a full agent operating system. 30+ custom skills. Multi-agent coordination. Persistent memory. Scheduled tasks. A visual artifacts system. Running 24/7 on a cloud VM.</p>
+
+  <div class="two-col">
+    <div>
+      <p class="body-text">What started as a simple WhatsApp CLI relay — connecting to WhatsApp Web via Baileys without Twilio — evolved into a production platform. Klaus isn't a chatbot. It's a lateral-thinking engineering assistant with opinions, a pixel crab mascot, and Japanese aesthetic branding.</p>
+      <p class="body-text">The architecture includes fire-and-forget sub-agents, entity-based persistent memory across sessions, a scheduled task system (clicks), public artifact deployment via Cloudflare tunnels, TTS via Supertonic, voice cloning via ElevenLabs, phone calls via Pine Voice, and full email capabilities via AgenticMail.</p>
+    </div>
+    <div>
+      <div class="skill-grid">
+        <div class="skill-card">
+          <span class="skill-count">4</span>
+          <div class="skill-card-label">Browser</div>
+          <div class="skill-card-items">agent-browser · chrome · dev-browser · scrapling</div>
+        </div>
+        <div class="skill-card">
+          <span class="skill-count">5</span>
+          <div class="skill-card-label">Visual</div>
+          <div class="skill-card-items">dart · blended-art · nothing-design · uptime-visual · threejs</div>
+        </div>
+        <div class="skill-card">
+          <span class="skill-count">3</span>
+          <div class="skill-card-label">Communication</div>
+          <div class="skill-card-items">agentmail · pine-voice · remind-me</div>
+        </div>
+        <div class="skill-card">
+          <span class="skill-count">3</span>
+          <div class="skill-card-label">Documents</div>
+          <div class="skill-card-items">pdf · pptx · xlsx</div>
+        </div>
+        <div class="skill-card">
+          <span class="skill-count">4</span>
+          <div class="skill-card-label">Social</div>
+          <div class="skill-card-items">esaadster-twitter · klaus-twitter · klaus-reddit · twitter-read</div>
+        </div>
+        <div class="skill-card">
+          <span class="skill-count">3</span>
+          <div class="skill-card-label">Infrastructure</div>
+          <div class="skill-card-items">sprite · sub-agents · klaus-admin</div>
+        </div>
+        <div class="skill-card">
+          <span class="skill-count">3</span>
+          <div class="skill-card-label">Content</div>
+          <div class="skill-card-items">uptime-content · story-explanation · summarize</div>
+        </div>
+        <div class="skill-card">
+          <span class="skill-count">2</span>
+          <div class="skill-card-label">Research</div>
+          <div class="skill-card-items">idea · google-ai-mode</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-kicker" style="margin-top:24px;">Selected Artifacts — 54 Published</div>
+  <div class="artifact-strip">
+    <div class="artifact-tag">bullshit-benchmark</div>
+    <div class="artifact-tag">hermes-agent-editorial</div>
+    <div class="artifact-tag">qwen35-vs-frontier</div>
+    <div class="artifact-tag">klaus-architecture</div>
+    <div class="artifact-tag">lead-tools-unified</div>
+    <div class="artifact-tag">uptime-sell-sheet</div>
+    <div class="artifact-tag">phi-consulting-v4</div>
+    <div class="artifact-tag">istanbul-european-prime</div>
+    <div class="artifact-tag">less-is-more</div>
+    <div class="artifact-tag">model-showdown-2026</div>
+    <div class="artifact-tag">gtm-pipeline-viz</div>
+    <div class="artifact-tag">health-dashboard</div>
+    <div class="artifact-tag">crypto-market-daily</div>
+    <div class="artifact-tag">klaus-subway</div>
+    <div class="artifact-tag">search-api-comparison</div>
+    <div class="artifact-tag">sonnet-vs-opus</div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ════════════════════ AGENTICMAIL + UPTIME ════════════════════ -->
+  <div class="two-col" style="border-bottom: none; padding-bottom: 0;">
+    <div>
+      <div class="section-kicker">Platform</div>
+      <h4 class="section-title" style="font-size:20px; margin-bottom:16px;">AgenticMail</h4>
+      <p class="body-text"><strong>The first platform to give AI agents real email addresses.</strong> 75+ REST API endpoints. Security guardrails scanning for API keys, PII, and credentials. MCP and OpenClaw integration with 54 MCP tools and 53 OpenClaw tools. Multi-agent collaboration via agent-to-agent email, RPC calls, and task queues.</p>
+      <p class="body-text">Used in production by Klaus daily — sending draft pitches, lead lists, pipeline reports, and file attachments. Built with TypeScript/Node.js.</p>
+    </div>
+    <div>
+      <div class="section-kicker">Freight Tech</div>
+      <h4 class="section-title" style="font-size:20px; margin-bottom:16px;">Uptime</h4>
+      <p class="body-text"><strong>Solving the driver recruiting crisis for small-to-mid fleets.</strong> CDL driver lead generation and qualification pipeline. Company prospecting from job boards with enrichment. Automated draft pitch emails personalized per fleet.</p>
+      <p class="body-text">Domain expertise from 5+ years at KeepTruckin — understands ELD, FMCSA, fleet ops, driver churn, and owner-operator economics. Design system with Figma components, Next.js app.</p>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ════════════════════ TECH STACK ════════════════════ -->
+  <div class="section-head">
+    <div class="section-kicker">Technical</div>
+    <h3 class="section-title">Stack & Languages</h3>
+  </div>
+
+  <div class="two-col" style="border-bottom: none; padding-bottom: 0;">
+    <div>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <div class="bar-label">TypeScript</div>
+          <div class="bar-track"><div class="bar-fill" style="width:69%"></div></div>
+          <div class="bar-value">69%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">JavaScript</div>
+          <div class="bar-track"><div class="bar-fill" style="width:15%"></div></div>
+          <div class="bar-value">15%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Python</div>
+          <div class="bar-track"><div class="bar-fill" style="width:4%"></div></div>
+          <div class="bar-value">4%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Swift</div>
+          <div class="bar-track"><div class="bar-fill" style="width:4%"></div></div>
+          <div class="bar-value">4%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Go</div>
+          <div class="bar-track"><div class="bar-fill" style="width:4%"></div></div>
+          <div class="bar-value">4%</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <table class="data-table">
+        <thead><tr><th>Layer</th><th>Technologies</th></tr></thead>
+        <tbody>
+          <tr><td>Runtime</td><td>Node.js 22+, QuickJS</td></tr>
+          <tr><td>Frontend</td><td>Next.js, React, TypeScript</td></tr>
+          <tr><td>AI / Models</td><td>MCP, Claude Code, Pi-Agent, OpenRouter</td></tr>
+          <tr><td>Messaging</td><td>Baileys, Slack, AgenticMail</td></tr>
+          <tr><td>Infra</td><td>Cloudflare, tmux, sprite.dev</td></tr>
+          <tr><td>Voice</td><td>Supertonic, ElevenLabs, Pine</td></tr>
+          <tr><td>Browser</td><td>Chrome CDP, Scrapling</td></tr>
+          <tr><td>Design</td><td>Nothing, Dart, Blended Art</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-kicker" style="margin-top:24px;">Models Evaluated in Production</div>
+  <div class="artifact-strip">
+    <div class="artifact-tag">Claude Opus 4.6</div>
+    <div class="artifact-tag">Claude Sonnet 4.6</div>
+    <div class="artifact-tag">GPT-5.3-Codex</div>
+    <div class="artifact-tag">GPT-5.4</div>
+    <div class="artifact-tag">GLM-5.1</div>
+    <div class="artifact-tag">MiniMax M2.5</div>
+    <div class="artifact-tag">Kimi K2.5</div>
+    <div class="artifact-tag">Qwen 3.5+</div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ════════════════════ WORKING STYLE ════════════════════ -->
+  <div class="section-head">
+    <div class="section-kicker">Method</div>
+    <h3 class="section-title">Working Style</h3>
+  </div>
+
+  <div class="pull-quote-tegaki">
+    <tegaki-renderer class="tegaki-pull" font="Caveat" speed="1.8" loop>Conversational engineering with AI agents as co-builders. Not writing specs. Not sitting in an IDE alone. A continuous dialogue.</tegaki-renderer>
+    <div class="attrib">— Working Method</div>
+  </div>
+
+  <p class="body-text">This shows up in the artifacts gallery: 54 published interactive visualizations covering everything from AI model benchmarks to Istanbul real estate analysis to freight tech sell sheets. Each one was built through dialogue, not a traditional development cycle.</p>
+  <p class="body-text">The approach extends to evaluating the AI ecosystem itself — routinely testing and switching between frontier models, building benchmark comparisons, and pushing agents into unconventional use cases like Reddit engagement, phone calls, and multi-agent email coordination.</p>
+
+  <hr class="sep">
+
+  <!-- ════════════════════ TRAJECTORY ════════════════════ -->
+  <div class="section-head">
+    <div class="section-kicker">Arc</div>
+    <h3 class="section-title">Career Trajectory</h3>
+  </div>
+
+  <div class="three-col">
+    <div>
+      <div class="stat-label">Phase 1 · 2008–2018</div>
+      <div style="font-size:18px; font-weight:500; color:var(--ink); margin:8px 0;">Foundation</div>
+      <p class="body-text" style="font-size:13px;">COMSATS Islamabad — BS Electrical (Computer) Engineering. Early career in technical support and operations.</p>
+    </div>
+    <div>
+      <div class="stat-label">Phase 2 · 2018–2024</div>
+      <div style="font-size:18px; font-weight:500; color:var(--ink); margin:8px 0;">RevOps Leadership</div>
+      <p class="body-text" style="font-size:13px;">KeepTruckin → DigitalOcean → Cloudways. Support-to-revenue transformation. Director-level CX and RevOps. Platform operations.</p>
+    </div>
+    <div>
+      <div class="stat-label">Phase 3 · 2024–Present</div>
+      <div style="font-size:18px; font-weight:500; color:var(--ink); margin:8px 0;"><span class="spot-red">AI Infrastructure</span></div>
+      <p class="body-text" style="font-size:13px;">Data-Grid + Uptime + AgenticMail + Klaus. 30+ skills, multi-agent coordination, persistent memory, 54 published artifacts.</p>
+    </div>
+  </div>
+
+  <p class="body-text" style="margin-top:24px;"><strong>The through-line:</strong> Every phase built on the last. Support ops taught the pain points. RevOps taught the business model. Now the AI infrastructure automates what used to require entire teams — lead generation, outreach, content creation, competitive intelligence, scheduling, and cross-functional coordination.</p>
+
+  <hr class="sep">
+
+  <!-- ════════════════════ SKILLS & EXPERTISE ════════════════════ -->
+  <div class="two-col" style="border-bottom:none;">
+    <div>
+      <div class="section-kicker">Technical</div>
+      <table class="data-table">
+        <tbody>
+          <tr><td>Agent Architecture</td><td>Production multi-agent systems</td></tr>
+          <tr><td>MCP</td><td>Custom servers, cross-agent comms</td></tr>
+          <tr><td>Full-Stack</td><td>TS, Python, Go, Swift, React</td></tr>
+          <tr><td>API Design</td><td>REST, MCP, WebSocket, SSE</td></tr>
+          <tr><td>Browser Auto</td><td>Chrome CDP, Scrapling</td></tr>
+          <tr><td>Design Systems</td><td>Nothing, Japanese minimalism</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="section-kicker">Business & Operations</div>
+      <table class="data-table">
+        <tbody>
+          <tr><td>RevOps</td><td>NDR, churn, retention strategy</td></tr>
+          <tr><td>Salesforce</td><td>Sales Cloud + Service Cloud</td></tr>
+          <tr><td>CRM</td><td>At-scale SaaS + fleet tech</td></tr>
+          <tr><td>GTM</td><td>Pipeline, lead gen, outbound</td></tr>
+          <tr><td>Freight Tech</td><td>ELD, FMCSA, CDL recruiting</td></tr>
+          <tr><td>Leadership</td><td>Cross-functional, eng → ops</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ════════════════════ RECOMMENDATIONS ════════════════════ -->
+  <div class="section-head">
+    <div class="section-kicker">Voices</div>
+    <h3 class="section-title">Recommendations</h3>
+  </div>
+
+  <div class="two-col" style="border-bottom:none;">
+    <div class="rec-quote">
+      <p>"Saad is a thorough professional with a deep yearning to learn and evolve. I have found him to be open to change and modify his behaviors."</p>
+      <div class="rec-attrib">— Agha Zulfikar, Project Manager</div>
+    </div>
+    <div class="rec-quote">
+      <p>"Saad, with his great motivational and inspirational support, enhanced greatly the interdepartmental relations which further contributed to better outcomes."</p>
+      <div class="rec-attrib">— Haseeb, Growth Operations Leader</div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ════════════════════ VALUE PROP ════════════════════ -->
+  <div class="pull-quote-tegaki" style="padding:32px 0; margin:24px 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);">
+    <tegaki-renderer class="tegaki-pull" font="Caveat" speed="1.5" loop>Saad builds the operational nervous system for AI agents.</tegaki-renderer>
+    <div class="attrib">— Unique Value Proposition</div>
+  </div>
+
+  <div class="three-col" style="border-bottom:none;">
+    <div>
+      <div class="stat-label">01</div>
+      <p class="body-text" style="font-size:13px;margin-top:4px;"><strong>Business × Engineering</strong> — Director-level RevOps AND production systems engineering. Knows what to build because he's been the user.</p>
+    </div>
+    <div>
+      <div class="stat-label">02</div>
+      <p class="body-text" style="font-size:13px;margin-top:4px;"><strong>Agent Infrastructure</strong> — 30+ skills, multi-agent coordination, persistent memory, scheduled automation. A production platform, not a weekend project.</p>
+    </div>
+    <div>
+      <div class="stat-label">03</div>
+      <p class="body-text" style="font-size:13px;margin-top:4px;"><strong>Freight Tech Domain</strong> — 5+ years at KeepTruckin. ELD, FMCSA, fleet operations, driver recruiting economics. Deep, not surface.</p>
+    </div>
+  </div>
+  <div class="three-col" style="padding-top:0; border-bottom:none;">
+    <div>
+      <div class="stat-label">04</div>
+      <p class="body-text" style="font-size:13px;margin-top:4px;"><strong>Design Systems</strong> — Three visual content systems with Japanese aesthetic influence. Agent output should look as good as it works.</p>
+    </div>
+    <div>
+      <div class="stat-label">05</div>
+      <p class="body-text" style="font-size:13px;margin-top:4px;"><strong>Model-Agnostic</strong> — Tests Claude, GPT, GLM, Kimi, MiniMax, Qwen across real workloads. Knows which works for what, with receipts.</p>
+    </div>
+    <div>
+      <div class="stat-label">06</div>
+      <p class="body-text" style="font-size:13px;margin-top:4px;"><strong>Open Source</strong> — AgenticMail, Klaus, and supporting tools. Proper licensing and documentation. Ships publicly.</p>
+    </div>
+  </div>
+
+  <!-- ════════════════════ EDUCATION + CERTS ════════════════════ -->
+  <hr class="sep-bold">
+
+  <div class="two-col" style="border-bottom:none; padding-top:16px;">
+    <div>
+      <div class="section-kicker">Education</div>
+      <div style="font-size:15px; font-weight:500; color:var(--ink); margin-top:8px;">COMSATS Islamabad</div>
+      <div style="font-size:13px; color:var(--ink-muted);">BS Electrical (Computer) Engineering · 2008–2013</div>
+      <div style="font-size:12px; color:var(--ink-faint); margin-top:4px;">CEPEX (Computer Engineering Society)</div>
+    </div>
+    <div>
+      <div class="section-kicker">Certifications</div>
+      <table class="data-table">
+        <tbody>
+          <tr><td>Claude Code in Action</td><td>Anthropic · Oct 2025</td></tr>
+          <tr><td>MCP: Advanced Topics</td><td>Anthropic · Oct 2025</td></tr>
+          <tr><td colspan="2" style="color:var(--ink-faint); font-style:italic;">+ 7 additional certifications</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="two-col" style="border-bottom:none; padding-top:0;">
+    <div>
+      <div class="section-kicker">Languages</div>
+      <div style="font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-soft); margin-top:8px;">
+        English — Professional · Urdu — Native
+      </div>
+    </div>
+    <div>
+      <div class="section-kicker">Availability</div>
+      <div style="font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-soft); margin-top:8px;">
+        Open to Work · Denver, CO / Islamabad, PK
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ COLOPHON ════════════════════ -->
+  <div class="colophon">
+    <div class="colophon-text">
+      Saad Farooq — Profile Editorial · Nothing Design System · Tegaki Edition<br>
+      Set in Doto, Space Grotesk, Space Mono, and Caveat (手書き) on warm washi paper<br>
+      Compiled April 2026 from LinkedIn, GitHub, and 54 published artifacts
+    </div>
+    <div style="text-align:center; margin-top:16px;">
+      <tegaki-renderer class="tegaki-colophon" font="Caveat" speed="2.0" loop>"a bit of whatchamacallating and flibbertigibetting"</tegaki-renderer>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════ TEGAKI INIT ════════════════════ -->
+<script type="module">
+  import { registerTegakiElement, TegakiEngine } from 'https://esm.sh/tegaki@0.10.0/wc';
+  import caveat from 'https://esm.sh/tegaki@0.10.0/fonts/caveat';
+
+  TegakiEngine.registerBundle(caveat);
+  registerTegakiElement();
+
+  // Intersection Observer — only play when visible
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const el = entry.target;
+      if (entry.isIntersecting) {
+        if (el.restart) el.restart();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  // Observe all tegaki elements after they register
+  setTimeout(() => {
+    document.querySelectorAll('tegaki-renderer').forEach(el => {
+      observer.observe(el);
+    });
+  }, 500);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Saad Farooq — GTM / RevOps Agentic Engineering</title>
+<style>
+  :root {
+    --ink: #121212;
+    --muted: #5a5a52;
+    --line: #d6d1c3;
+    --paper: #f4f1e8;
+    --accent: #2f2f2b;
+    --accent-soft: #ebe6d8;
+    --gold: #8a8068;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #d8d3c4;
+    color: var(--ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.34;
+  }
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 24px auto;
+    background: var(--paper);
+    padding: 0.46in 0.52in;
+    box-shadow: 0 12px 30px rgba(30, 28, 20, 0.16);
+    position: relative;
+  }
+  .page:before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: repeating-linear-gradient(90deg, #222 0 10px, #777064 10px 14px, #222 14px 24px);
+  }
+  header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 34px;
+    letter-spacing: -1.1px;
+    line-height: 1;
+  }
+  .role {
+    margin-top: 7px;
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .tagline {
+    margin-top: 9px;
+    max-width: 620px;
+    color: #2f2f2b;
+    font-size: 13.3px;
+  }
+  .contact {
+    text-align: right;
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.55;
+    padding-top: 2px;
+    white-space: nowrap;
+  }
+  .contact a { color: var(--muted); text-decoration: none; }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.42fr .82fr;
+    gap: 18px;
+  }
+  section { margin-bottom: 13px; }
+  h2 {
+    margin: 0 0 7px;
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 4px;
+  }
+  .summary {
+    font-size: 12.4px;
+    color: #23231f;
+  }
+  .item { margin-bottom: 10px; }
+  .item-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: baseline;
+    margin-bottom: 2px;
+  }
+  .title { font-size: 13px; font-weight: 800; }
+  .org { color: var(--muted); font-weight: 650; }
+  .date { color: var(--muted); font-size: 10.8px; white-space: nowrap; }
+  ul { margin: 4px 0 0 16px; padding: 0; }
+  li { margin: 2.5px 0; font-size: 11.6px; }
+  .project {
+    border-left: 3px solid var(--accent);
+    padding-left: 9px;
+    margin-bottom: 9px;
+  }
+  .project .name { font-weight: 850; font-size: 12.4px; }
+  .project .desc { font-size: 11.4px; color: #3b4652; margin-top: 2px; }
+  .pillbox { display: flex; flex-wrap: wrap; gap: 5px; }
+  .pill {
+    font-size: 10.5px;
+    color: #2f3742;
+    border: 1px solid #d6d1c3;
+    background: #eee9dc;
+    padding: 3.5px 6px;
+    border-radius: 999px;
+  }
+  .metric-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 7px;
+  }
+  .metric {
+    background: var(--accent-soft);
+    border: 1px solid #d6d1c3;
+    padding: 7px;
+    border-radius: 10px;
+  }
+  .metric b { display:block; font-size: 16px; color: var(--accent); line-height: 1; }
+  .metric span { font-size: 10.3px; color: #5a5a52; }
+  .side-note {
+    font-size: 11.2px;
+    color: #384250;
+    background: #eee9dc;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 9px;
+  }
+  .compact-list li { font-size: 11.2px; }
+  .footer {
+    position: absolute;
+    bottom: .25in;
+    left: .52in;
+    right: .52in;
+    color: #6f6a5d;
+    font-size: 9.5px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #d6d1c3;
+    padding-top: 6px;
+  }
+  @media print {
+    body { background: white; }
+    .page { margin: 0; box-shadow: none; width: 8.5in; height: 11in; overflow: hidden; }
+    a { color: inherit; }
+  }
+</style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <h1>Saad Farooq</h1>
+        <div class="role">GTM / RevOps Agentic Engineering</div>
+        <div class="tagline">I build practical AI systems on top of Pi, Klaus, AgenticMail, and Uptime — combining product taste, RevOps judgment, and production design/ops experience to evaluate whether coding agents actually feel useful, trustworthy, and engineer-grade.</div>
+      </div>
+      <div class="contact">
+        Islamabad / Remote<br />
+        <a href="tel:+17206598123">+1 720 659 8123</a><br />
+        <a href="mailto:saad@data-grid.ai">saad@data-grid.ai</a><br />
+        GitHub / X: <a href="https://github.com/eSaadster">@eSaadster</a><br />
+        LinkedIn: saad-farooq-38aa0675<br />
+        Data-Grid · Uptime · Klaus
+      </div>
+    </header>
+
+    <div class="grid">
+      <div>
+        <section>
+          <h2>Profile</h2>
+          <div class="summary">
+            I’m strongest where product ambiguity meets operational reality. I’ve spent 13+ years inside cloud, freight tech, CX, RevOps, retention, and platform operations — then turned that operating experience into agentic systems. For this AI evaluator role, my edge is judgment: does Claude Code, Codex, or Cursor behave like a strong engineer, guide the user well, and build trust — or does it merely produce plausible-looking output?
+          </div>
+        </section>
+
+        <section>
+          <h2>Operating Style</h2>
+          <div class="summary">
+            I care about systems that reduce friction: reusable skills, clean interfaces, reliable workflows, consistent feedback loops, and opinionated defaults. My design-system lens is not just visual — it’s operational. I look for patterns that make production teams faster, safer, and less dependent on heroic effort.
+          </div>
+        </section>
+
+        <section>
+          <h2>Relevant Experience</h2>
+          <div class="item">
+            <div class="item-head"><div><span class="title">Founder / Agentic Systems Builder</span> <span class="org">— Data-Grid · Uptime · Klaus</span></div><div class="date">2025–Present</div></div>
+            <ul>
+              <li>I build production AI workflows across WhatsApp, email, browser automation, voice, memory, scheduled jobs, artifacts, MCP tools, social posting, and sub-agent delegation.</li>
+              <li>Most of my agentic work is built on top of <b>Pi (pi.dev)</b>: a minimal, stable coding-agent harness I use as the base layer for fast iteration, evaluation, and task execution.</li>
+              <li>I built and operate <b>Klaus</b>: a WhatsApp-native AI assistant / agent OS with persistent memory, custom skills, scheduled clicks, browser/email/social tools, artifact publishing, and sub-agent orchestration.</li>
+              <li>I created model and agent eval artifacts comparing Claude, Codex/GPT, Gemini, Qwen, Kimi, MiniMax, and DeepSeek across coding, reasoning, tool use, context behavior, and developer UX.</li>
+              <li>I use adversarial prompts and “bullshit benchmark” style tests to evaluate whether models detect incoherence, over-explain, hallucinate structure, or give misleading confidence.</li>
+            </ul>
+          </div>
+
+          <div class="item">
+            <div class="item-head"><div><span class="title">Revenue Operations / Customer Systems</span> <span class="org">— Phi Consulting, Cloudways, DigitalOcean</span></div><div class="date">2020–2025</div></div>
+            <ul>
+              <li>I led churn, retention, platform operations, customer health, and KPI programs across cloud infrastructure and SaaS environments.</li>
+              <li>I converted messy operational problems into measurable systems: scoring, dashboards, QA rubrics, escalation paths, playbooks, and repeatable workflows.</li>
+              <li>I evaluated AI-assisted ops workflows for customer retention, pipeline reporting, prospect research, support triage, and GTM automation.</li>
+            </ul>
+          </div>
+
+          <div class="item">
+            <div class="item-head"><div><span class="title">Sr. Manager Technical Support</span> <span class="org">— KeepTruckin / Motive</span></div><div class="date">2018–2020</div></div>
+            <ul>
+              <li>I built deep domain expertise in ELD, FMCSA compliance, fleet operations, driver workflows, support quality, and high-volume technical troubleshooting.</li>
+              <li>I helped transform support from a cost center into a revenue-supporting operation, including a 96% call pickup rate versus industry-standard abandonment norms.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>Selected AI Evaluation Work</h2>
+          <div class="project">
+            <div class="name">Coding-agent evaluation: Claude Code / Codex / Cursor</div>
+            <div class="desc">I evaluate whether responses make sense, whether preambles and reasoning are useful, whether the output reflects strong engineering judgment, and whether the interaction feels right to an experienced developer.</div>
+          </div>
+          <div class="project">
+            <div class="name">Pi → Klaus production agent loop</div>
+            <div class="desc">Pi is my base coding-agent stack; Klaus is the production assistant layer built around real workflows. This gives me daily exposure to model failures: tool misuse, brittle memory, bad search, weak recovery, shallow reasoning, and UX friction.</div>
+          </div>
+          <div class="project">
+            <div class="name">Uptime / freight AI workflows</div>
+            <div class="desc">I apply domain-specific evaluation to driver matching, video screening, compliance documents, recruiting pipelines, lead scoring, and operational truthfulness.</div>
+          </div>
+        </section>
+      </div>
+
+      <aside>
+        <section>
+          <h2>Stack From Real Projects</h2>
+          <div class="pillbox">
+            <span class="pill">Pi / pi.dev</span><span class="pill">Klaus agent OS</span><span class="pill">Warelay</span><span class="pill">AgenticMail</span><span class="pill">Uptime</span><span class="pill">Data-Grid</span><span class="pill">Claude Code</span><span class="pill">OpenAI Codex</span><span class="pill">Cursor workflows</span><span class="pill">MCP</span><span class="pill">Browser automation</span><span class="pill">WhatsApp / Baileys</span><span class="pill">Cloudflare</span><span class="pill">Supabase/Postgres</span><span class="pill">TypeScript</span><span class="pill">Node.js</span><span class="pill">Python</span><span class="pill">Shell</span><span class="pill">AgentMail</span><span class="pill">ElevenLabs / TTS</span>
+          </div>
+        </section>
+
+        <section>
+          <h2>Evaluator Strengths</h2>
+          <div class="pillbox">
+            <span class="pill">Engineering taste</span><span class="pill">2 vs 4 scoring</span><span class="pill">Reasoning quality</span><span class="pill">Preamble quality</span><span class="pill">Trust erosion</span><span class="pill">Tool-use evals</span><span class="pill">Hallucination testing</span><span class="pill">Product judgment</span><span class="pill">Ops realism</span><span class="pill">Direct feedback</span><span class="pill">Failure taxonomies</span><span class="pill">Production feedback loops</span>
+          </div>
+        </section>
+
+        <section>
+          <h2>Technical / Product Lens</h2>
+          <ul class="compact-list">
+            <li><b>AI:</b> Claude Code, OpenAI Codex, Cursor-style agents, Gemini, Qwen, Kimi, DeepSeek, GLM; model routing and comparative testing.</li>
+            <li><b>Agents:</b> Pi, MCP, custom skills, tool calling, memory, scheduled tasks, sub-agents, browser automation, email/voice/social workflows.</li>
+            <li><b>Systems:</b> TypeScript, Node.js, Python, shell, APIs, webhooks, Postgres/Supabase, Cloudflare, browser automation.</li>
+            <li><b>Ops:</b> RevOps, churn, customer health, QA rubrics, support systems, lead enrichment, GTM automation, freight workflows.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Proof Points</h2>
+          <div class="metric-row">
+            <div class="metric"><b>13+</b><span>years tech / ops leadership</span></div>
+            <div class="metric"><b>30+</b><span>custom Klaus AI skills</span></div>
+            <div class="metric"><b>75+</b><span>AgenticMail API endpoints</span></div>
+            <div class="metric"><b>50+</b><span>published AI/ops artifacts</span></div>
+          </div>
+        </section>
+
+        <section>
+          <h2>How I Judge Agents</h2>
+          <div class="side-note">
+            I don’t only ask “is this code correct?” I ask: would a strong engineer say this? Is the explanation helpful or performative? Did the agent guide the user or dump output? Did it notice ambiguity? Did it recover cleanly? Would this interaction make me trust the tool more next time?
+          </div>
+        </section>
+
+        <section>
+          <h2>Domains</h2>
+          <ul class="compact-list">
+            <li>AI coding agents, Claude Code, Codex, Cursor, and developer tooling</li>
+            <li>Freight tech, ELD, CDL recruiting, FMCSA-adjacent workflows</li>
+            <li>Cloud infrastructure, support operations, retention systems</li>
+            <li>GTM automation, lead enrichment, outreach quality</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Selected Artifacts</h2>
+          <ul class="compact-list">
+            <li>Less Is More — minimal agent design analysis centered on Pi</li>
+            <li>Bullshit Benchmark — incoherence and trust testing</li>
+            <li>Claude vs Codex / Sonnet vs Opus model breakdowns</li>
+            <li>Qwen 3.5 and frontier model benchmark comparisons</li>
+            <li>Lead tools, GTM lifecycle, DataGrid AI intelligence reports</li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+
+    <div class="footer">
+      <span>Single-page resume · GTM / RevOps Agentic Engineering + AI Evaluation</span>
+      <span>Updated May 2026</span>
+    </div>
+  </main>
+</body>
+</html>
